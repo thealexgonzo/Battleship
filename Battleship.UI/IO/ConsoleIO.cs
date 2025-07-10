@@ -49,5 +49,11 @@ namespace Battleship.UI.IO
                 }
             }
         }
+
+        public static void AnyKey()
+        {
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
     }
 }

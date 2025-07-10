@@ -13,6 +13,8 @@ namespace Battleship.UI.Game
         public static void Run(IPlayer p1, IPlayer p2)
         {
             ConsoleIO.DisplayBattleGrid();
+
+            Ship(p1.SelectShipType)
         }
     }
 }
