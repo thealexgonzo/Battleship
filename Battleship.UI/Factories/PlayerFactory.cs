@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Battleship.UI.Implementations;
 using Battleship.UI.Interfaces;
+using Battleship.UI.IO;
 
 namespace Battleship.UI.Factories
 {
@@ -12,20 +13,27 @@ namespace Battleship.UI.Factories
     {
         public static IPlayer GetPlayerType(string prompt)
         {
-            string playerType;
+            string userChoice;
 
             do
             {
                 Console.WriteLine("\n");
                 Console.Write(prompt);
-                playerType = Console.ReadKey().Key.ToString().ToUpper();
+                userChoice = Console.ReadKey().Key.ToString().ToUpper();
 
-                if (playerType == "H")
+                if (userChoice == "H")
                 {
-                    return new HumanPlayer();
+                    HumanPlayer player = new HumanPlayer();
+
+                    player.playerName = ConsoleIO.GetPlayerName("\n>> Authorization required. Enter Commander name: ", player.IsHuman);
+
+                    return player;
                 }
-                else if (playerType == "C")
+                else if (userChoice == "C")
                 {
+                    ConsoleIO.TypeOut("\n>>> Opponent selected: Iron Depth [AUTONOMOUS COMBAT SYSTEM v3.4] " +
+                        "\n>>> Initializing strategic modules... Ready for engagement.");
+
                     return new ComputerPlayer();
                 }
                 else

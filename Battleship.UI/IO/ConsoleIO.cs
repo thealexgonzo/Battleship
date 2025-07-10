@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Battleship.UI.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
@@ -18,14 +19,24 @@ namespace Battleship.UI.IO
             Console.ResetColor();
         }
         
-        public static string GetPlayerName(string prompt)
+        public static string GetPlayerName(string prompt, bool isHumanPlayer)
         {
             string humanPlayerName;
 
-            Console.Write(prompt);
-            humanPlayerName = Console.ReadLine();
+            if (isHumanPlayer)
+            {
+                Console.Write(prompt);
+                humanPlayerName = Console.ReadLine();
 
-            return humanPlayerName;
+                return humanPlayerName;
+            }
+            else
+            {
+                Console.WriteLine("\n>>> Opponent selected: Iron Depth [AUTONOMOUS COMBAT SYSTEM v3.4]" +
+                "\n>>> Initializing strategic modules... Ready for engagement.");
+            }
+
+            return null;
         }
 
         public static Coordinates GetCurrentShipFirstCoordinate()
@@ -34,14 +45,13 @@ namespace Battleship.UI.IO
 
             do
             {
-                Console.Write("Enter the column of your coordinate: ");
-                string column = Console.ReadLine();
-                Console.Write("Enter the row of your coordinate: ");
-                int row = int.Parse(Console.ReadLine());
+                Console.Write("Enter the coordinate: ");
+                string coordinate = Console.ReadLine().ToUpper();
+                int row = int.Parse(coordinate.Substring(1));
 
-                if ((gridColumns.Contains(column) && column.Length == 1) && (row >= 1 && row <= 10))
+                if ((gridColumns.Contains(coordinate[0])) && (row >= 1 && row <= 10))
                 {
-                    return new Coordinates(column, row);
+                    return new Coordinates(coordinate);
                 }
                 else
                 {
@@ -52,34 +62,21 @@ namespace Battleship.UI.IO
 
             } while (true);
         }
-        //public static void DisplayBattleGrid()
-        //{
-        //    Console.WriteLine("\n");
-        //    Console.WriteLine($"   A B C D E F G H I J");
-
-        //    for ( int i = 1; i <= 10; i++)
-        //    {
-        //        if (i == 10)
-        //        {
-        //            Console.Write($"{i}");
-        //            Console.ForegroundColor = ConsoleColor.Cyan;
-        //            Console.WriteLine(" ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
-        //            Console.ResetColor();
-        //        }
-        //        else
-        //        {
-        //            Console.Write($" {i}");
-        //            Console.ForegroundColor = ConsoleColor.Cyan;
-        //            Console.WriteLine(" ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
-        //            Console.ResetColor();
-        //        }
-        //    }
-        //}
 
         public static void AnyKey()
         {
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
+        }
+        public static void TypeOut(string message, int delay = 60)
+        {
+            foreach (char c in message)
+            {
+                Console.Write(c);
+                Thread.Sleep(delay);
+            }
+
+            Console.WriteLine();
         }
     }
 }

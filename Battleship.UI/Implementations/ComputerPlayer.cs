@@ -12,6 +12,8 @@ namespace Battleship.UI.Implementations
     {
         public bool IsHuman { get { return false; } }
 
+        public string playerName { get { return "Iron Depth"; } }
+
         public char ChooseShipOrientation()
         {
             throw new NotImplementedException();
@@ -22,16 +24,7 @@ namespace Battleship.UI.Implementations
             throw new NotImplementedException();
         }
 
-        public string GetPlayerName()
-        {
-            return "\n>>> Opponent selected: Iron Depth [AUTONOMOUS COMBAT SYSTEM v3.4]" + 
-                "\n>>> Initializing strategic modules... Ready for engagement.";
-        }
-
-        //public string PlaceShipCoordinate()
-        //{
-        //    throw new NotImplementedException();
-        //}
+        
 
         public string SelectAttackCoordiante()
         {

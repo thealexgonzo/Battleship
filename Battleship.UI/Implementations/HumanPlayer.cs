@@ -14,6 +14,11 @@ namespace Battleship.UI.Implementations
     {
         public bool IsHuman { get { return true; } }
 
+        public string playerName { get; set; }
+        //public void GetPlayerName()
+        //{
+        //    playerName = ConsoleIO.GetPlayerName("\n>> Authorization required. Enter Commander name: ", IsHuman);
+        //}
         public char ChooseShipOrientation()
         {
             throw new NotImplementedException();
@@ -23,18 +28,6 @@ namespace Battleship.UI.Implementations
         {
             throw new NotImplementedException();
         }
-
-        public string GetPlayerName()
-        {
-            return ConsoleIO.GetPlayerName("\n>> Authorization required. Enter Commander name: ");
-        }
-
-        //public Coordinates PlaceShipCoordinate()
-        //{
-        //    Coordinates coordiante = new Coordinates();
-
-        //    return coordiante;
-        //}
 
         public string SelectAttackCoordiante()
         {

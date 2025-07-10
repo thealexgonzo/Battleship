@@ -42,8 +42,8 @@ namespace Battleship.UI
             {
                 if(orientation == Orientation.Vertical)
                 {
-                    i = int.Parse(coordinate.firstCoordinate[1].ToString()) - 1;
-                    shipCoordinate[i] += (gridColumns[gridColumns.IndexOf(coordinate.firstCoordinate[0])]);
+                    i = int.Parse(coordinate.coordinate[1].ToString()) - 1;
+                    shipCoordinate[i] += (gridColumns[gridColumns.IndexOf(coordinate.coordinate[0])]);
                     shipCoordinate[i] += gridRows[i];
                 }
             }

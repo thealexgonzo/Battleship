@@ -8,10 +8,10 @@ namespace Battleship.UI
 {
     public class Coordinates
     {
-        public string firstCoordinate { get; private set; }
-        public Coordinates(string column, int row)
+        public string coordinate { get; private set; }
+        public Coordinates(string coordinate)
         {
-            firstCoordinate = column + row;
+            this.coordinate = coordinate;
         }
     }
 }
