@@ -8,7 +8,7 @@ namespace Battleship.UI.Enums
 {
     public enum ShipType
     {
-        AircraftCarrier,
+        AircraftCarrier = 0,
         BattleShip,
         Cruiser,
         Submarine,

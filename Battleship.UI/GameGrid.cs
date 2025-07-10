@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Battleship.UI.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Battleship.UI
 {
     public class GameGrid
     {
-        public static void DisplayBattleGrid()
+        public static void DisplayBattleGrid(Coordinates coordiante, Orientation orientation, Direction direction)
         {
             string[] grid = new string[100];
 

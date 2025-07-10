@@ -1,4 +1,5 @@
-﻿using Battleship.UI.Interfaces;
+﻿using Battleship.UI.Enums;
+using Battleship.UI.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -18,7 +19,6 @@ namespace Battleship.UI.IO
             Console.WriteLine("=========================================");
             Console.ResetColor();
         }
-        
         public static string GetPlayerName(string prompt, bool isHumanPlayer)
         {
             string humanPlayerName;
@@ -39,13 +39,23 @@ namespace Battleship.UI.IO
             return null;
         }
 
+        public static void InitialiseCombatRadar(IPlayer player)
+        {
+            ConsoleIO.TypeOut("\nInitializing combat systems...");
+
+            //Thread.Sleep(2000);
+
+            Console.WriteLine($"\nWelcome, Commander {player.playerName}.");
+            Console.WriteLine("Your fleet is standing by. It's time to deploy your ships.");
+        }
+        
         public static Coordinates GetCurrentShipFirstCoordinate()
         {
             string gridColumns = "ABCDEFGHIJ";
 
             do
             {
-                Console.Write("Enter the coordinate: ");
+                Console.Write("Enter the starting coordinate: ");
                 string coordinate = Console.ReadLine().ToUpper();
                 int row = int.Parse(coordinate.Substring(1));
 
@@ -60,6 +70,57 @@ namespace Battleship.UI.IO
                     Console.ResetColor();
                 }
 
+            } while (true);
+        }
+
+        public static Orientation GetShipOrientation(string prompt)
+        {
+            do
+            {
+                Console.Write(prompt);
+                string orientation = Console.ReadKey().Key.ToString().ToUpper();
+
+                if (orientation == "V")
+                {
+                    return Orientation.Vertical;
+                }
+                else if (orientation == "H")
+                {
+                    return Orientation.Horizontal;
+                }
+                else
+                {
+                    Console.WriteLine("Commander, that orientation is not valid. Please enter 'H' for horizontal or 'V' for vertical.");
+                }
+            } while (true);
+        }
+        internal static Direction GetShipDirection(string prompt)
+        {
+            do
+            {
+                Console.Write(prompt);
+                string direction = Console.ReadKey().Key.ToString().ToUpper();
+
+                if (direction == "U")
+                {
+                    return Direction.Up;
+                }
+                else if (direction == "D")
+                {
+                    return Direction.Down;
+                }
+                else if(direction == "L")
+                {
+                    return Direction.Left;
+                }
+                else if(direction == "R")
+                {
+                    return Direction.Right;
+                }
+                else
+                {
+                    Console.WriteLine("Commander, that direction is not valid. Please enter (U)p, (D)own, (L)eft, or (R)ight.");
+                }
             } while (true);
         }
 
@@ -78,5 +139,7 @@ namespace Battleship.UI.IO
 
             Console.WriteLine();
         }
+
+        
     }
 }
