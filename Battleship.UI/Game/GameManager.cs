@@ -34,25 +34,27 @@ namespace Battleship.UI
 
         public void SetUpPlayer1Grid()
         {
-            ConsoleIO.InitialiseCombatRadar(player1);
-
-            GameGrid.DisplayBattleGrid(coordinate, orientation, direction);
-
-            Console.WriteLine("\nCoordinates should be from A-J (column) and 1-10 (row).");
-            Console.WriteLine("You will be prompted for the starting coordinate and the direction of placement.");
-
-            Coordinates acCoords;
-            Orientation acOrientation;
-            Direction acDirection;
+            ConsoleIO.InitialiseEmptyCombatRadar(player1);
 
             for (int i = 0; i < fleet.Length; i++)
             {
-                Console.WriteLine($"Ship to place: {fleet[i].name} | Size: {fleet[i].size}");
-                acCoords = ConsoleIO.GetCurrentShipFirstCoordinate();
-                acOrientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
-                acDirection = ConsoleIO.GetShipDirection("\nSpecify direction of deployment, Commander — Up, Down, Left, or Right.");
-                ConsoleIO.AnyKey();
+                PositionShips(fleet[i].name, fleet[i].size);
             }
+        }
+
+        public void PositionShips(string name, int size)
+        {
+            Coordinates coordinates;
+            Orientation orientation;
+            Direction direction;
+
+            Console.WriteLine($"\nShip to place: {name} | Size: {size}");
+            coordinates = ConsoleIO.GetCurrentShipFirstCoordinate();
+            orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
+            direction = ConsoleIO.GetShipDirection("\nSpecify direction of deployment, Commander — Up, Down, Left, or Right.");
+            ConsoleIO.AnyKey();
+
+            GameGrid.DisplayBattleGrid(coordinates, orientation, direction); 
         }
     }
 }

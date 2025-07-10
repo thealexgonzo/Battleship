@@ -39,16 +39,49 @@ namespace Battleship.UI.IO
             return null;
         }
 
-        public static void InitialiseCombatRadar(IPlayer player)
+        public static void InitialiseEmptyCombatRadar(IPlayer player)
         {
             ConsoleIO.TypeOut("\nInitializing combat systems...");
 
-            //Thread.Sleep(2000);
+            Thread.Sleep(2000);
+
+            Console.Clear();
 
             Console.WriteLine($"\nWelcome, Commander {player.playerName}.");
             Console.WriteLine("Your fleet is standing by. It's time to deploy your ships.");
+
+            DisplayEmptyRadar();
+
+            Console.WriteLine("\nCoordinates should be from A-J (column) and 1-10 (row).");
+            Console.WriteLine("You will be prompted for the starting coordinate and the direction of placement.");
         }
-        
+
+        public static void DisplayEmptyRadar()
+        {
+            Console.WriteLine("\n");
+            Console.WriteLine($"   A B C D E F G H I J");
+
+            for (int i = 1; i <= 10; i++)
+            {
+                if (i == 10)
+                {
+                    Console.Write($"{i}");
+                }
+                else
+                {
+                    Console.Write($" {i}");
+                }
+
+                for (int x = 0; x <= 9; x++)
+                {
+
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write(" ~");
+                    Console.ResetColor();
+                }
+                Console.WriteLine();
+            }
+        }
         public static Coordinates GetCurrentShipFirstCoordinate()
         {
             string gridColumns = "ABCDEFGHIJ";
