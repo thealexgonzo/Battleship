@@ -7,10 +7,10 @@ namespace Battleship.UI
     {
         public string[] shipCoordinate { get; private set; }
         public string shipCharacterIdentifier { get; private set; }
-        public Ship(ShipType ship, Coordinates firstCoordinate, Orientation orientation, Direction direction)
+        public Ship(ShipType ship, Coordinates coordinate, Orientation orientation, Direction direction)
         {
             string gridColumns = "ABCDEFGHIJ";
-            int[] gridRows = [1,2,3,4,5,6,7,8,9,10];
+            string[] gridRows = ["1","2","3","4","5","6","7","8","9","10"];
             
             if(ship == ShipType.AircraftCarrier)
             {
@@ -38,9 +38,14 @@ namespace Battleship.UI
                 shipCharacterIdentifier = "D";
             }
 
-            for(int i = 0; i < gridColumns.Length; i++)
+            for(int i = 0; i <= shipCoordinate.Length; i++)
             {
-
+                if(orientation == Orientation.Vertical)
+                {
+                    i = int.Parse(coordinate.firstCoordinate[1].ToString()) - 1;
+                    shipCoordinate[i] += (gridColumns[gridColumns.IndexOf(coordinate.firstCoordinate[0])]);
+                    shipCoordinate[i] += gridRows[i];
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,29 +27,54 @@ namespace Battleship.UI.IO
 
             return humanPlayerName;
         }
-        public static void DisplayBattleGrid()
-        {
-            Console.WriteLine("\n");
-            Console.WriteLine($"   A B C D E F G H I J");
 
-            for ( int i = 1; i <= 10; i++)
+        public static Coordinates GetCurrentShipFirstCoordinate()
+        {
+            string gridColumns = "ABCDEFGHIJ";
+
+            do
             {
-                if (i == 10)
+                Console.Write("Enter the column of your coordinate: ");
+                string column = Console.ReadLine();
+                Console.Write("Enter the row of your coordinate: ");
+                int row = int.Parse(Console.ReadLine());
+
+                if ((gridColumns.Contains(column) && column.Length == 1) && (row >= 1 && row <= 10))
                 {
-                    Console.Write($"{i}");
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine(" ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
-                    Console.ResetColor();
+                    return new Coordinates(column, row);
                 }
                 else
                 {
-                    Console.Write($" {i}");
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine(" ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Coordinate rejected. Grid reference invalid or outside targeting range (e.g., A1 to J10).");
                     Console.ResetColor();
                 }
-            }
+
+            } while (true);
         }
+        //public static void DisplayBattleGrid()
+        //{
+        //    Console.WriteLine("\n");
+        //    Console.WriteLine($"   A B C D E F G H I J");
+
+        //    for ( int i = 1; i <= 10; i++)
+        //    {
+        //        if (i == 10)
+        //        {
+        //            Console.Write($"{i}");
+        //            Console.ForegroundColor = ConsoleColor.Cyan;
+        //            Console.WriteLine(" ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+        //            Console.ResetColor();
+        //        }
+        //        else
+        //        {
+        //            Console.Write($" {i}");
+        //            Console.ForegroundColor = ConsoleColor.Cyan;
+        //            Console.WriteLine(" ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+        //            Console.ResetColor();
+        //        }
+        //    }
+        //}
 
         public static void AnyKey()
         {

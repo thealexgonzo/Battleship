@@ -29,10 +29,12 @@ namespace Battleship.UI.Implementations
             return ConsoleIO.GetPlayerName("\n>> Authorization required. Enter Commander name: ");
         }
 
-        public string PlaceShipCoordinate()
-        {
-            throw new NotImplementedException();
-        }
+        //public Coordinates PlaceShipCoordinate()
+        //{
+        //    Coordinates coordiante = new Coordinates();
+
+        //    return coordiante;
+        //}
 
         public string SelectAttackCoordiante()
         {

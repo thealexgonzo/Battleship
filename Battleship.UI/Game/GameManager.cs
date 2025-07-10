@@ -8,6 +8,6 @@ namespace Battleship.UI
 {
     public class GameManager
     {
-        public 
+        public Ship[] ships = new Ship[5]; 
     }
 }

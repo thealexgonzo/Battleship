@@ -28,10 +28,10 @@ namespace Battleship.UI.Implementations
                 "\n>>> Initializing strategic modules... Ready for engagement.";
         }
 
-        public string PlaceShipCoordinate()
-        {
-            throw new NotImplementedException();
-        }
+        //public string PlaceShipCoordinate()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public string SelectAttackCoordiante()
         {

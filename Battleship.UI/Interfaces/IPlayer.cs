@@ -5,7 +5,7 @@ namespace Battleship.UI.Interfaces
     {
         bool IsHuman { get; }
         string SelectShipType();
-        string PlaceShipCoordinate();
+        //Coordinates PlaceShipCoordinate();
         string GetPlayerName();
         char ChooseShipOrientation();
         Direction GetPlacementDirection();

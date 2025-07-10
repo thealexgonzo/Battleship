@@ -1,5 +1,6 @@
 ﻿using Battleship.UI.Interfaces;
 using Battleship.UI.IO;
+using Battleship.UI.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,11 @@ namespace Battleship.UI.Game
     {
         public static void Run(IPlayer p1, IPlayer p2)
         {
-            ConsoleIO.DisplayBattleGrid();
+            //ConsoleIO.DisplayBattleGrid();
+            GameGrid.DisplayBattleGrid();
 
-            Ship(p1.SelectShipType)
+            Ship ship = new Ship(ShipType.AircraftCarrier, ConsoleIO.GetCurrentShipFirstCoordinate(), Orientation.Vertical, Direction.Down);
+
         }
     }
 }
