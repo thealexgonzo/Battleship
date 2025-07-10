@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Battleship.UI
+namespace Battleship.UI.Enums
 {
-    internal class App
+    public enum Direction
     {
+        Left,
+        Right,
+        Up,
+        Down,
     }
 }

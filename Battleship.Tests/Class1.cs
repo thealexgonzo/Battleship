@@ -1,7 +1,7 @@
-﻿namespace Battleship.Tests
-{
-    public class Class1
-    {
+﻿//namespace Battleship.Tests
+//{
+//    public class Class1
+//    {
 
-    }
-}
+//    }
+//}

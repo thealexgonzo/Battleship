@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Battleship.UI
 {
-    internal class ConsoleIO
+    public class GameManager
     {
+        public 
     }
 }

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Battleship.UI
 {
-    internal class GameManager
+    public class GameGrid
     {
+        public string[] grid = new string[100];
     }
 }
