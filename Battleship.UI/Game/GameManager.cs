@@ -38,23 +38,23 @@ namespace Battleship.UI
 
             for (int i = 0; i < fleet.Length; i++)
             {
-                GetShipCoordinates(fleet[i].name, fleet[i].size);
+                fleet[i].shipCoordinates = GetShipCoordinates(fleet[i], fleet[i].size);
+                GameGrid.DisplayBattleGrid(fleet[i].shipCoordinates);
             }
         }
 
-        public void GetShipCoordinates(string name, int size)
+        public string[] GetShipCoordinates(Ship ship, int size)
         {
-            Coordinates coordinates;
-            Orientation orientation;
-            Direction direction;
+            Console.WriteLine($"\nShip to place: {ship.name} | Size: {ship.size}");
+            Coordinates coordinates = ConsoleIO.GetCurrentShipFirstCoordinate();
+            Orientation orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
+            Direction direction = ConsoleIO.GetShipDirection("\nSpecify direction of deployment, Commander — Up, Down, Left, or Right.");
 
-            Console.WriteLine($"\nShip to place: {name} | Size: {size}");
-            coordinates = ConsoleIO.GetCurrentShipFirstCoordinate();
-            orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
-            direction = ConsoleIO.GetShipDirection("\nSpecify direction of deployment, Commander — Up, Down, Left, or Right.");
             ConsoleIO.AnyKey();
 
-            GameGrid.DisplayBattleGrid(coordinates, orientation, direction); 
+            ShipCoordinates currentShip = new ShipCoordinates(ship, coordinates, orientation, direction);
+
+            return currentShip.shipCoordinates;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Battleship.UI
 {
     public class GameGrid
     {
-        public static void DisplayBattleGrid(Coordinates coordiante, Orientation orientation, Direction direction)
+        public static void DisplayBattleGrid(string[] coordiantes)
         {
             string[] grid = new string[100];
 
