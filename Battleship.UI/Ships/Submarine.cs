@@ -12,6 +12,8 @@ namespace Battleship.UI.Ships
         {
             name = "Submarine";
             size = 3;
+            type = Enums.ShipType.Submarine;
+            shipCoordinates = new string[size];
         }
     }
 }

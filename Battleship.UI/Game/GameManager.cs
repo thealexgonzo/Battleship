@@ -38,11 +38,11 @@ namespace Battleship.UI
 
             for (int i = 0; i < fleet.Length; i++)
             {
-                PositionShips(fleet[i].name, fleet[i].size);
+                GetShipCoordinates(fleet[i].name, fleet[i].size);
             }
         }
 
-        public void PositionShips(string name, int size)
+        public void GetShipCoordinates(string name, int size)
         {
             Coordinates coordinates;
             Orientation orientation;
