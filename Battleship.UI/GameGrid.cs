@@ -11,13 +11,18 @@ namespace Battleship.UI
     {
         public static void DisplayBattleGrid(string[] coordiantes)
         {
-            string[] grid = new string[100];
+            string[] grid = coordiantes;
 
             Console.WriteLine("\n");
             Console.WriteLine($"   A B C D E F G H I J");
 
-            for (int i = 1; i <= 10; i++)
+            //Prints 10 rows
+            for (int i = 0; i < grid.Length; i++)
             {
+                if(i % 10 == 0)
+                {
+                    Console.WriteLine();
+                }
                 if (i == 10)
                 {
                     Console.Write($"{i}");
@@ -27,21 +32,16 @@ namespace Battleship.UI
                     Console.Write($" {i}");
                 }
 
-                for (int x = 0; x <= 9; x++)
+                if (grid[i] == null)
                 {
-                    if (grid[x] == null)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.Write(" ~");
-                        Console.ResetColor();
-                    }
-                    else
-                    {
-                        Console.Write(grid[x]);
-                    }
-                    
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write(" ~");
+                    Console.ResetColor();
                 }
-                Console.WriteLine();
+                else
+                {
+                    Console.Write($" {grid[i]}");
+                }
             }
         }
     }

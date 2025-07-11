@@ -16,7 +16,9 @@ namespace Battleship.UI
 {
     public class GameManager
     {
-        public Ship[] fleet = new Ship[5];
+        public Ship[] ship = new Ship[5];
+
+        public string[] radar = new string[100];
         public IPlayer player1 { get; private set; }
         public IPlayer player2 { get; private set; }
 
@@ -25,36 +27,82 @@ namespace Battleship.UI
             player1 = p1;
             player2 = p2;
 
-            fleet[0] = new AircraftCarrier();
-            fleet[1] = new Battleship.UI.Ships.Battleship();
-            fleet[2] = new Cruiser();
-            fleet[3] = new Submarine();
-            fleet[4] = new Destroyer();
+            ship[0] = new AircraftCarrier();
+            ship[1] = new Battleship.UI.Ships.Battleship();
+            ship[2] = new Cruiser();
+            ship[3] = new Submarine();
+            ship[4] = new Destroyer();
         }
 
         public void SetUpPlayer1Grid()
         {
             ConsoleIO.InitialiseEmptyCombatRadar(player1);
 
-            for (int i = 0; i < fleet.Length; i++)
+            for (int i = 0; i < ship.Length; i++)
             {
-                fleet[i].shipCoordinates = GetShipCoordinates(fleet[i], fleet[i].size);
-                GameGrid.DisplayBattleGrid(fleet[i].shipCoordinates);
+                GetShipCoordinates(ship[i]);
+                GameGrid.DisplayBattleGrid(radar);
+                ConsoleIO.AnyKey();
             }
         }
 
-        public string[] GetShipCoordinates(Ship ship, int size)
+        private void GetShipCoordinates(Ship ship)
         {
             Console.WriteLine($"\nShip to place: {ship.name} | Size: {ship.size}");
-            Coordinates coordinates = ConsoleIO.GetCurrentShipFirstCoordinate();
+            CoordinateParser(ship);
+        }
+
+        private void CoordinateParser(Ship ship)
+        {
+            Ship currentShip = ship;
+            Coordinates firstPoint = ConsoleIO.GetCurrentShipFirstCoordinate();
             Orientation orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
             Direction direction = ConsoleIO.GetShipDirection("\nSpecify direction of deployment, Commander — Up, Down, Left, or Right.");
+            
 
-            ConsoleIO.AnyKey();
+            string gridColumsn = "ABCDEFGHIJ";
+            int column = gridColumsn.IndexOf(firstPoint.coordinate[0]);
+            int row = int.Parse(firstPoint.coordinate.Substring(1)) - 1;
 
-            ShipCoordinates currentShip = new ShipCoordinates(ship, coordinates, orientation, direction);
+            int gridFirstPoint = 0;
 
-            return currentShip.shipCoordinates;
+            gridFirstPoint = column + (row * 10);
+
+            if(orientation == Orientation.Vertical)
+            {
+                if(direction == Direction.Up)
+                {
+                    for (int i = gridFirstPoint; i <= currentShip.size; i -= 10)
+                    {
+                        radar[i] += currentShip.identifier;
+                    }
+                }
+                else if(direction == Direction.Down)
+                {
+                    for(int i = 0; i < currentShip.size; i ++)
+                    {
+                        radar[gridFirstPoint] += currentShip.identifier;
+                        gridFirstPoint += 10;
+                    }
+                }
+            }
+            else if(orientation == Orientation.Horizontal)
+            {
+                if(direction == Direction.Left)
+                {
+                    for (int i = gridFirstPoint; i <= currentShip.size; i--)
+                    {
+                        radar[i] += currentShip.identifier;
+                    }
+                }
+                else if( direction == Direction.Right)
+                {
+                    for (int i = gridFirstPoint; i <= currentShip.size; i++)
+                    {
+                        radar[i] += currentShip.identifier;
+                    }
+                }
+            }
         }
     }
 }

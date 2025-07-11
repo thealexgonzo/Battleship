@@ -84,7 +84,7 @@ namespace Battleship.UI.IO
         }
         public static Coordinates GetCurrentShipFirstCoordinate()
         {
-            string gridColumns = "ABCDEFGHIJ";
+            string column = "ABCDEFGHIJ";
 
             do
             {
@@ -92,7 +92,7 @@ namespace Battleship.UI.IO
                 string coordinate = Console.ReadLine().ToUpper();
                 int row = int.Parse(coordinate.Substring(1));
 
-                if ((gridColumns.Contains(coordinate[0])) && (row >= 1 && row <= 10))
+                if ((column.Contains(coordinate[0])) && (row >= 1 && row <= 10))
                 {
                     return new Coordinates(coordinate);
                 }
