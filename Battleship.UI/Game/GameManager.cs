@@ -18,7 +18,7 @@ namespace Battleship.UI
     {
         public Ship[] ship = new Ship[5];
 
-        public string[] radar = new string[100];
+        public string[] player1Radar = new string[100];
         public IPlayer player1 { get; private set; }
         public IPlayer player2 { get; private set; }
 
@@ -36,7 +36,7 @@ namespace Battleship.UI
 
         public void SetUpPlayer1Grid()
         {
-            GameGrid.DisplayBattleGrid(radar);
+            GameGrid.DisplayBattleGrid(player1Radar);
             ConsoleIO.InitialiseEmptyCombatRadar(player1);
             GetShipCoordinates(ship[0]);
             ConsoleIO.AnyKey();
@@ -44,7 +44,7 @@ namespace Battleship.UI
             for (int i = 1; i < ship.Length; i++)
             {
                 Console.Clear();
-                GameGrid.DisplayBattleGrid(radar);
+                GameGrid.DisplayBattleGrid(player1Radar);
                 GetShipCoordinates(ship[i]);
                 ConsoleIO.AnyKey();
             }
@@ -77,7 +77,7 @@ namespace Battleship.UI
                 {
                     for (int i = 0; i < currentShip.size; i++)
                     {
-                        radar[gridFirstPoint] += currentShip.identifier;
+                        player1Radar[gridFirstPoint] += currentShip.identifier;
                         gridFirstPoint -= 10;
                     }
                 }
@@ -85,7 +85,7 @@ namespace Battleship.UI
                 {
                     for(int i = 0; i < currentShip.size; i ++)
                     {
-                        radar[gridFirstPoint] += currentShip.identifier;
+                        player1Radar[gridFirstPoint] += currentShip.identifier;
                         gridFirstPoint += 10;
                     }
                 }
@@ -96,7 +96,7 @@ namespace Battleship.UI
                 {
                     for (int i = 0; i < currentShip.size; i++)
                     {
-                        radar[gridFirstPoint] += currentShip.identifier;
+                        player1Radar[gridFirstPoint] += currentShip.identifier;
                         gridFirstPoint -= 1;
                     }
                 }
@@ -104,7 +104,7 @@ namespace Battleship.UI
                 {
                     for (int i = 0; i < currentShip.size; i++)
                     {
-                        radar[gridFirstPoint] += currentShip.identifier;
+                        player1Radar[gridFirstPoint] += currentShip.identifier;
                         gridFirstPoint += 1;
                     }
                 }
