@@ -41,9 +41,9 @@ namespace Battleship.UI.IO
 
         public static void InitialiseEmptyCombatRadar(IPlayer player)
         {
-            ConsoleIO.TypeOut("\nInitializing combat systems...");
+            //ConsoleIO.TypeOut("\nInitializing combat systems...");
 
-            Thread.Sleep(2000);
+            //Thread.Sleep(2000);
 
             Console.Clear();
 
@@ -159,7 +159,7 @@ namespace Battleship.UI.IO
 
         public static void AnyKey()
         {
-            Console.WriteLine("Press any key to continue...");
+            Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
         }
         public static void TypeOut(string message, int delay = 60)
