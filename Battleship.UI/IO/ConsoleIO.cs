@@ -127,33 +127,48 @@ namespace Battleship.UI.IO
                 }
             } while (true);
         }
-        internal static Direction GetShipDirection(string prompt)
+        internal static Direction GetShipDirection(Orientation orientation)
         {
             do
             {
-                Console.Write(prompt);
-                string direction = Console.ReadKey().Key.ToString().ToUpper();
+                string direction;
+                if(orientation == Orientation.Vertical)
+                {
+                    Console.Write("\nSpecify direction of deployment, Commander — Up or Down.");
+                    direction = Console.ReadKey().Key.ToString().ToUpper();
 
-                if (direction == "U")
-                {
-                    return Direction.Up;
+                    if (direction == "U")
+                    {
+                        return Direction.Up;
+                    }
+                    else if (direction == "D")
+                    {
+                        return Direction.Down;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Commander, that direction is not valid. Please enter (U)p or (D)own.");
+                    }
                 }
-                else if (direction == "D")
+                else if(orientation == Orientation.Horizontal)
                 {
-                    return Direction.Down;
+                    Console.Write("\nSpecify direction of deployment, Commander — Left, or Right.");
+                    direction = Console.ReadKey().Key.ToString().ToUpper();
+
+                    if (direction == "L")
+                    {
+                        return Direction.Left;
+                    }
+                    else if (direction == "R")
+                    {
+                        return Direction.Right;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Commander, that direction is not valid. Please enter (L)eft, or (R)ight.");
+                    }
                 }
-                else if(direction == "L")
-                {
-                    return Direction.Left;
-                }
-                else if(direction == "R")
-                {
-                    return Direction.Right;
-                }
-                else
-                {
-                    Console.WriteLine("Commander, that direction is not valid. Please enter (U)p, (D)own, (L)eft, or (R)ight.");
-                }
+                
             } while (true);
         }
 

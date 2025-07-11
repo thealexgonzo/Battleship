@@ -57,9 +57,8 @@ namespace Battleship.UI
             Ship currentShip = ship;
             Coordinates firstPoint = ConsoleIO.GetCurrentShipFirstCoordinate();
             Orientation orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
-            Direction direction = ConsoleIO.GetShipDirection("\nSpecify direction of deployment, Commander — Up, Down, Left, or Right.");
+            Direction direction = ConsoleIO.GetShipDirection(orientation);
             
-
             string gridColumsn = "ABCDEFGHIJ";
             int column = gridColumsn.IndexOf(firstPoint.coordinate[0]);
             int row = int.Parse(firstPoint.coordinate.Substring(1)) - 1;
@@ -72,9 +71,10 @@ namespace Battleship.UI
             {
                 if(direction == Direction.Up)
                 {
-                    for (int i = gridFirstPoint; i <= currentShip.size; i -= 10)
+                    for (int i = 0; i < currentShip.size; i++)
                     {
-                        radar[i] += currentShip.identifier;
+                        radar[gridFirstPoint] += currentShip.identifier;
+                        gridFirstPoint -= 10;
                     }
                 }
                 else if(direction == Direction.Down)
@@ -90,16 +90,18 @@ namespace Battleship.UI
             {
                 if(direction == Direction.Left)
                 {
-                    for (int i = gridFirstPoint; i <= currentShip.size; i--)
+                    for (int i = 0; i < currentShip.size; i++)
                     {
-                        radar[i] += currentShip.identifier;
+                        radar[gridFirstPoint] += currentShip.identifier;
+                        gridFirstPoint -= 1;
                     }
                 }
                 else if( direction == Direction.Right)
                 {
-                    for (int i = gridFirstPoint; i <= currentShip.size; i++)
+                    for (int i = 0; i < currentShip.size; i++)
                     {
-                        radar[i] += currentShip.identifier;
+                        radar[gridFirstPoint] += currentShip.identifier;
+                        gridFirstPoint += 1;
                     }
                 }
             }

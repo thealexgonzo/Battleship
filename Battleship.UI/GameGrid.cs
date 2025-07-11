@@ -14,14 +14,14 @@ namespace Battleship.UI
             Console.WriteLine("\n");
             Console.WriteLine($"   A B C D E F G H I J");
 
+            int rowNumber = 1;
+
             for (int i = 0; i < coordiantes.Length; i += 10)
             {
-                //Console.Write(i == 10 ? $"{i}" : $" {i}");
-                Console.WriteLine("1");  
+                Console.Write(rowNumber == 10 ? $"{rowNumber}" : $" {rowNumber}");  
                 
                 for (int j = i; j < i + 10; j++)
                 {
-
                     if (coordiantes[j] == null)
                     {
                         Console.ForegroundColor = ConsoleColor.Cyan;
@@ -32,9 +32,10 @@ namespace Battleship.UI
                     {
                         Console.Write($" {coordiantes[j]}");
                     }
-
                 }
+                Console.WriteLine();
 
+                rowNumber++;
             }
         }
     }
