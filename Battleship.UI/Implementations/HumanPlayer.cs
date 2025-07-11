@@ -15,28 +15,5 @@ namespace Battleship.UI.Implementations
         public bool IsHuman { get { return true; } }
 
         public string playerName { get; set; }
-        //public void GetPlayerName()
-        //{
-        //    playerName = ConsoleIO.GetPlayerName("\n>> Authorization required. Enter Commander name: ", IsHuman);
-        //}
-        public char ChooseShipOrientation()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Direction GetPlacementDirection()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string SelectAttackCoordiante()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string SelectShipType()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

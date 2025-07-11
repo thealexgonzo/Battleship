@@ -13,7 +13,7 @@ namespace Battleship.UI.Ships
             name = "Battle ship";
             size = 4;
             type = Enums.ShipType.BattleShip;
-            identifier = "B";
+            shipIdentifier = "B";
             shipCoordinates = new string[size];
         }
     }

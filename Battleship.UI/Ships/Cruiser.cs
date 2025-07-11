@@ -14,7 +14,7 @@ namespace Battleship.UI.Ships
             size = 3;
             type = Enums.ShipType.Cruiser;
             shipCoordinates = new string[size];
-            identifier = "C";
+            shipIdentifier = "C";
         }
     }
 }

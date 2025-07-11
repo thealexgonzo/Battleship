@@ -14,7 +14,7 @@ namespace Battleship.UI.Ships
             size = 5;
             type = Enums.ShipType.AircraftCarrier;
             shipCoordinates = new string[size];
-            identifier = "A";
+            shipIdentifier = "A";
         }
     }
 }

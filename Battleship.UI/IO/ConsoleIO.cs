@@ -82,34 +82,30 @@ namespace Battleship.UI.IO
         }
         public static Coordinates GetCurrentShipFirstCoordinate()
         {
-            string column = "ABCDEFGHIJ";
-
             do
             {
+                string columns = "ABCDEFGHIJ";
+
                 Console.Write("Enter the starting coordinate: ");
                 string coordinate = Console.ReadLine().ToUpper();
-                if(coordinate.Length > 1 && coordinate.Length <= 3)
-                {
-                    int row = int.Parse(coordinate.Substring(1));
 
-                    if ((column.Contains(coordinate[0])) && (row >= 1 && row <= 10))
-                    {
-                        return new Coordinates(coordinate);
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Coordinate rejected. Grid reference invalid or outside targeting range (e.g., A1 to J10).");
-                        Console.ResetColor();
-                    }
+                if ((coordinate.Length > 1 && coordinate.Length <= 3) && 
+                    (int.TryParse(coordinate.Substring(1), out int row)) && 
+                    ((columns.Contains(coordinate[0])) && (row >= 1 && row <= 10)))
+                {
+                    return new Coordinates(coordinate);
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Coordinate rejected. Grid reference invalid or outside targeting range (e.g., A1 to J10).");
-                    Console.ResetColor();
+                    DisplayInvalidCoordinateErrorMessage();
                 }
             } while (true);
+        }
+        private static void DisplayInvalidCoordinateErrorMessage()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Coordinate rejected. Grid reference invalid or outside targeting range (e.g., A1 to J10).");
+            Console.ResetColor();
         }
         public static Orientation GetShipOrientation(string prompt)
         {

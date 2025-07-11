@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using Battleship.UI;
+﻿
 using Battleship.UI.Enums;
-using Battleship.UI.Implementations;
 using Battleship.UI.Interfaces;
 using Battleship.UI.IO;
 using Battleship.UI.Ships;
@@ -18,7 +10,8 @@ namespace Battleship.UI
     {
         public Ship[] ship = new Ship[5];
 
-        public string[] player1Radar = new string[100];
+        public static string[] player1Radar = new string[100];
+        public string[] player2Radar = new string[100];
         public IPlayer player1 { get; private set; }
         public IPlayer player2 { get; private set; }
 
@@ -34,23 +27,23 @@ namespace Battleship.UI
             ship[4] = new Destroyer();
         }
 
-        public void SetUpPlayer1Grid()
+        public void SetUpCurrentPlayerFleet(IPlayer currentPlayer)
         {
             GameGrid.DisplayBattleGrid(player1Radar);
             ConsoleIO.InitialiseEmptyCombatRadar(player1);
-            GetShipCoordinates(ship[0]);
+            PositionShips(ship[0]);
             ConsoleIO.AnyKey();
 
             for (int i = 1; i < ship.Length; i++)
             {
                 Console.Clear();
                 GameGrid.DisplayBattleGrid(player1Radar);
-                GetShipCoordinates(ship[i]);
+                PositionShips(ship[i]);
                 ConsoleIO.AnyKey();
             }
         }
 
-        private void GetShipCoordinates(Ship ship)
+        private void PositionShips(Ship ship)
         {
             Console.WriteLine($"\nShip to place: {ship.name} | Size: {ship.size}");
             CoordinateParser(ship);
@@ -58,57 +51,76 @@ namespace Battleship.UI
 
         private void CoordinateParser(Ship ship)
         {
-            Ship currentShip = ship;
             Coordinates firstPoint = ConsoleIO.GetCurrentShipFirstCoordinate();
+
             Orientation orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
             Direction direction = ConsoleIO.GetShipDirection(orientation);
-            
-            string gridColumsn = "ABCDEFGHIJ";
-            int column = gridColumsn.IndexOf(firstPoint.coordinate[0]);
-            int row = int.Parse(firstPoint.coordinate.Substring(1)) - 1;
 
-            int gridFirstPoint = 0;
+            int gridCurrentPoint = firstPoint.gridPosition;
 
-            gridFirstPoint = column + (row * 10);
-
-            if(orientation == Orientation.Vertical)
+            if (orientation == Orientation.Vertical)
             {
-                if(direction == Direction.Up)
+                if (direction == Direction.Up)
                 {
-                    for (int i = 0; i < currentShip.size; i++)
+                    for (int i = 0; i < ship.size; i++)
                     {
-                        player1Radar[gridFirstPoint] += currentShip.identifier;
-                        gridFirstPoint -= 10;
+                        player1Radar[gridCurrentPoint] += ship.shipIdentifier;
+                        gridCurrentPoint -= 10;
                     }
                 }
-                else if(direction == Direction.Down)
+                else if (direction == Direction.Down)
                 {
-                    for(int i = 0; i < currentShip.size; i ++)
+                    for (int i = 0; i < ship.size; i++)
                     {
-                        player1Radar[gridFirstPoint] += currentShip.identifier;
-                        gridFirstPoint += 10;
+                        player1Radar[gridCurrentPoint] += ship.shipIdentifier;
+                        gridCurrentPoint += 10;
                     }
                 }
             }
-            else if(orientation == Orientation.Horizontal)
+            else if (orientation == Orientation.Horizontal)
             {
-                if(direction == Direction.Left)
+                if (direction == Direction.Left)
                 {
-                    for (int i = 0; i < currentShip.size; i++)
+                    for (int i = 0; i < ship.size; i++)
                     {
-                        player1Radar[gridFirstPoint] += currentShip.identifier;
-                        gridFirstPoint -= 1;
+                        player1Radar[gridCurrentPoint] += ship.shipIdentifier;
+                        gridCurrentPoint -= 1;
                     }
                 }
-                else if( direction == Direction.Right)
+                else if (direction == Direction.Right)
                 {
-                    for (int i = 0; i < currentShip.size; i++)
+                    for (int i = 0; i < ship.size; i++)
                     {
-                        player1Radar[gridFirstPoint] += currentShip.identifier;
-                        gridFirstPoint += 1;
+                        player1Radar[gridCurrentPoint] += ship.shipIdentifier;
+                        gridCurrentPoint += 1;
                     }
                 }
             }
         }
+
+        public IPlayer SwithPlayers(IPlayer player)
+        {
+            if(player == player1)
+            {
+                return player2;
+            }
+            else
+            {
+                return player1;
+            }
+        }
+
+        //public bool ValidateGridPositoin(int position)
+        //{
+        //    for (int i = 0; i < player1Radar.Length; i++)
+        //    {
+        //        if (player1Radar[i] == null)
+        //        {
+        //            return true;
+        //        }
+        //    }
+
+        //    return false;
+        //}
     }
 }

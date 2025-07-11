@@ -25,9 +25,11 @@ namespace Battleship.UI.Game
 
             GameManager manager = new GameManager(player1, player2);
 
-            //Ship ship = new Ship(ShipType.AircraftCarrier, ConsoleIO.GetCurrentShipFirstCoordinate(), Orientation.Vertical, Direction.Down);
+            IPlayer currentPlayer = player1;
 
-            manager.SetUpPlayer1Grid();
+            manager.SetUpCurrentPlayerFleet(currentPlayer);
+
+            currentPlayer = manager.SwithPlayers(currentPlayer);
         }
     }
 }
