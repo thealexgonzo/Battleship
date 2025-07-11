@@ -38,7 +38,6 @@ namespace Battleship.UI.IO
 
             return null;
         }
-
         public static void InitialiseEmptyCombatRadar(IPlayer player)
         {
             //ConsoleIO.TypeOut("\nInitializing combat systems...");
@@ -55,7 +54,6 @@ namespace Battleship.UI.IO
             Console.WriteLine("\nCoordinates should be from A-J (column) and 1-10 (row).");
             Console.WriteLine("You will be prompted for the starting coordinate and the direction of placement.");
         }
-
         public static void DisplayEmptyRadar()
         {
             Console.WriteLine("\n");
@@ -90,11 +88,20 @@ namespace Battleship.UI.IO
             {
                 Console.Write("Enter the starting coordinate: ");
                 string coordinate = Console.ReadLine().ToUpper();
-                int row = int.Parse(coordinate.Substring(1));
-
-                if ((column.Contains(coordinate[0])) && (row >= 1 && row <= 10))
+                if(coordinate.Length > 1 && coordinate.Length <= 3)
                 {
-                    return new Coordinates(coordinate);
+                    int row = int.Parse(coordinate.Substring(1));
+
+                    if ((column.Contains(coordinate[0])) && (row >= 1 && row <= 10))
+                    {
+                        return new Coordinates(coordinate);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Coordinate rejected. Grid reference invalid or outside targeting range (e.g., A1 to J10).");
+                        Console.ResetColor();
+                    }
                 }
                 else
                 {
@@ -102,10 +109,8 @@ namespace Battleship.UI.IO
                     Console.WriteLine("Coordinate rejected. Grid reference invalid or outside targeting range (e.g., A1 to J10).");
                     Console.ResetColor();
                 }
-
             } while (true);
         }
-
         public static Orientation GetShipOrientation(string prompt)
         {
             do
@@ -123,7 +128,9 @@ namespace Battleship.UI.IO
                 }
                 else
                 {
-                    Console.WriteLine("Commander, that orientation is not valid. Please enter 'H' for horizontal or 'V' for vertical.");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nCommander, that orientation is not valid. Please enter 'H' for horizontal or 'V' for vertical.");
+                    Console.ResetColor();
                 }
             } while (true);
         }
@@ -134,7 +141,7 @@ namespace Battleship.UI.IO
                 string direction;
                 if(orientation == Orientation.Vertical)
                 {
-                    Console.Write("\nSpecify direction of deployment, Commander — Up or Down.");
+                    Console.Write("\nSpecify direction of deployment, Commander — Up or Down: ");
                     direction = Console.ReadKey().Key.ToString().ToUpper();
 
                     if (direction == "U")
@@ -147,12 +154,14 @@ namespace Battleship.UI.IO
                     }
                     else
                     {
-                        Console.WriteLine("Commander, that direction is not valid. Please enter (U)p or (D)own.");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\nCommander, that direction is not valid. Please enter (U)p or (D)own.");
+                        Console.ResetColor();
                     }
                 }
                 else if(orientation == Orientation.Horizontal)
                 {
-                    Console.Write("\nSpecify direction of deployment, Commander — Left, or Right.");
+                    Console.Write("\nSpecify direction of deployment, Commander — Left, or Right: ");
                     direction = Console.ReadKey().Key.ToString().ToUpper();
 
                     if (direction == "L")
@@ -165,13 +174,14 @@ namespace Battleship.UI.IO
                     }
                     else
                     {
-                        Console.WriteLine("Commander, that direction is not valid. Please enter (L)eft, or (R)ight.");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\nCommander, that direction is not valid. Please enter (L)eft, or (R)ight.");
+                        Console.ResetColor();
                     }
                 }
                 
             } while (true);
         }
-
         public static void AnyKey()
         {
             Console.WriteLine("\nPress any key to continue...");
@@ -186,8 +196,6 @@ namespace Battleship.UI.IO
             }
 
             Console.WriteLine();
-        }
-
-        
+        } 
     }
 }

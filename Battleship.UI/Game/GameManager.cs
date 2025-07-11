@@ -36,12 +36,16 @@ namespace Battleship.UI
 
         public void SetUpPlayer1Grid()
         {
+            GameGrid.DisplayBattleGrid(radar);
             ConsoleIO.InitialiseEmptyCombatRadar(player1);
+            GetShipCoordinates(ship[0]);
+            ConsoleIO.AnyKey();
 
-            for (int i = 0; i < ship.Length; i++)
+            for (int i = 1; i < ship.Length; i++)
             {
-                GetShipCoordinates(ship[i]);
+                Console.Clear();
                 GameGrid.DisplayBattleGrid(radar);
+                GetShipCoordinates(ship[i]);
                 ConsoleIO.AnyKey();
             }
         }
