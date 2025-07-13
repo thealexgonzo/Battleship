@@ -8,7 +8,7 @@ namespace Battleship.UI
 {
     public class Coordinates
     {
-        public int gridPosition { get; private set; }
+        public int gridAcceptedCoordinate { get; private set; }
         public Coordinates(string coordinate)
         {
             string gridColumns = "ABCDEFGHIJ";
@@ -16,7 +16,7 @@ namespace Battleship.UI
             int column = gridColumns.IndexOf(coordinate[0]);
             int row = int.Parse(coordinate.Substring(1)) - 1;
 
-            gridPosition = column + (row * 10);
+            gridAcceptedCoordinate = column + (row * 10);
         }
     }
 }

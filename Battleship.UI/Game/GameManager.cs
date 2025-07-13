@@ -3,6 +3,9 @@ using Battleship.UI.Enums;
 using Battleship.UI.Interfaces;
 using Battleship.UI.IO;
 using Battleship.UI.Ships;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.Design;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Battleship.UI
 {
@@ -46,83 +49,116 @@ namespace Battleship.UI
         private void PositionShips(Ship ship)
         {
             Console.WriteLine($"\nShip to place: {ship.name} | Size: {ship.size}");
-            CoordinateParser(ship);
-        }
-
-        private void CoordinateParser(Ship ship)
-        {
+            Coordinates coordinate = ConsoleIO.GetCurrentShipFirstCoordinate();
+            int currentCoordinate = coordinate.gridAcceptedCoordinate;
+            Orientation orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
+            Direction direction = ConsoleIO.GetShipDirection(orientation);
             do
             {
-                Coordinates firstPoint = ConsoleIO.GetCurrentShipFirstCoordinate();
-
-                int gridCurrentPoint = firstPoint.gridPosition;
-
-                if (ValidateGridPositoin(gridCurrentPoint))
+                //Direction direction = ConsoleIO.GetShipDirection(orientation);
+            //ValidateShipPlacement(ship, currentCoordinate, direction)
+                if (ValidateShipPlacement(ship, currentCoordinate, direction))
                 {
-
-                    Orientation orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
-                    Direction direction = ConsoleIO.GetShipDirection(orientation);
-
-                    if (orientation == Orientation.Vertical)
+                    if (direction == Direction.Up)
                     {
-                        if (direction == Direction.Up)
+                        for (int i = 0; i < ship.size; i++)
                         {
-                            for (int i = 0; i < ship.size; i++)
-                            {
-                                if (player1Radar[gridCurrentPoint] == null)
-                                {
-                                    player1Radar[gridCurrentPoint] += ship.shipIdentifier;
-                                    gridCurrentPoint -= 10;
-                                }
-                                else
-                                {
-                                    Console.WriteLine("POSITION TAKEN");
-                                    return;
-                                }
-                            }
-
-                            return;
-                        }
-                        else if (direction == Direction.Down)
-                        {
-                            for (int i = 0; i < ship.size; i++)
-                            {
-                                player1Radar[gridCurrentPoint] += ship.shipIdentifier;
-                                gridCurrentPoint += 10;
-                            }
-
-                            return;
+                            player1Radar[currentCoordinate] += ship.shipIdentifier;
+                            currentCoordinate -= 10;
                         }
                     }
-                    else if (orientation == Orientation.Horizontal)
+                    else if (direction == Direction.Down)
                     {
-                        if (direction == Direction.Left)
+                        for (int i = 0; i < ship.size; i++)
                         {
-                            for (int i = 0; i < ship.size; i++)
-                            {
-                                player1Radar[gridCurrentPoint] += ship.shipIdentifier;
-                                gridCurrentPoint -= 1;
-                            }
-                            return;
+                            player1Radar[currentCoordinate] += ship.shipIdentifier;
+                            currentCoordinate += 10;
                         }
-                        else if (direction == Direction.Right)
+                    }
+                    else if (direction == Direction.Left)
+                    {
+                        for (int i = 0; i < ship.size; i++)
                         {
-                            for (int i = 0; i < ship.size; i++)
-                            {
-                                player1Radar[gridCurrentPoint] += ship.shipIdentifier;
-                                gridCurrentPoint += 1;
-                            }
-                            return;
+                            player1Radar[currentCoordinate] += ship.shipIdentifier;
+                            currentCoordinate -= 1;
+                        }
+                    }
+                    else if (direction == Direction.Right)
+                    {
+                        for (int i = 0; i < ship.size; i++)
+                        {
+                            player1Radar[currentCoordinate] += ship.shipIdentifier;
+                            currentCoordinate += 1;
                         }
                     }
                 }
-                    else
+                else
                 {
-                    Console.WriteLine("POSITION TAKEN");
+                    Console.WriteLine("That placement isn't valid.");
                 }
-        } while (true);
+
+            } while (true) ;
         }
 
+        private bool ValidateShipPlacement(Ship ship, int coordinate, Direction direction)
+        {
+            int currentCoordinate = coordinate;
+            string[] shipPositions = new string[ship.size];
+            bool shipPositionValid = true;
+
+            if (player1Radar[currentCoordinate] == null)
+            {           
+                if (direction == Direction.Up)
+                {
+                    for (int i = 0; i < ship.size; i++)
+                    {
+                        shipPositions[i] += player1Radar[currentCoordinate];
+                        currentCoordinate -= 10;
+                    }
+                }
+                else if (direction == Direction.Down)
+                {
+                    for (int i = 0; i < ship.size; i++)
+                    {
+                        shipPositions[i] += player1Radar[currentCoordinate];
+                        currentCoordinate += 10;
+                    }
+                }
+                else if (direction == Direction.Left)
+                {
+                    for (int i = 0; i < ship.size; i++)
+                    {
+                        shipPositions[i] += player1Radar[currentCoordinate];
+                        currentCoordinate -= 1;
+                    }
+                }
+                else if (direction == Direction.Right)
+                {
+                    for (int i = 0; i < ship.size; i++)
+                    {
+                        shipPositions[i] += player1Radar[currentCoordinate];
+                        currentCoordinate += 1;
+                    }
+                }
+            }
+            else
+            {
+                shipPositionValid = false;
+            }
+
+            return shipPositionValid;
+        }
+        public bool CheckGridSpaceEmpty(int position)
+        {
+            if (player1Radar[position] == null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public IPlayer SwithPlayers(IPlayer player)
         {
             if(player == player1)
@@ -134,21 +170,8 @@ namespace Battleship.UI
                 return player1;
             }
         }
-        public bool ValidateGridPositoin(int position)
-        {
-            for (int i = position; i < player1Radar.Length; i++)
-            {
-                if (player1Radar[i] == null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            return false;
-        }
     }
 }
+
+
+
