@@ -6,6 +6,7 @@ using Battleship.UI.Ships;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.Design;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 namespace Battleship.UI
 {
@@ -52,49 +53,44 @@ namespace Battleship.UI
             Coordinates coordinate = ConsoleIO.GetCurrentShipFirstCoordinate();
             int currentCoordinate = coordinate.gridAcceptedCoordinate;
             Orientation orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
-            Direction direction = ConsoleIO.GetShipDirection(orientation);
+            //Direction direction = ConsoleIO.GetShipDirection(orientation);
             do
             {
-                //Direction direction = ConsoleIO.GetShipDirection(orientation);
-            //ValidateShipPlacement(ship, currentCoordinate, direction)
+                Direction direction = ConsoleIO.GetShipDirection(orientation);
+                //ValidateShipPlacement(ship, currentCoordinate, direction)
                 if (ValidateShipPlacement(ship, currentCoordinate, direction))
                 {
-                    if (direction == Direction.Up)
+                    for (int i = 0; i < ship.size; i++)
                     {
-                        for (int i = 0; i < ship.size; i++)
+                        if (direction == Direction.Up)
                         {
                             player1Radar[currentCoordinate] += ship.shipIdentifier;
                             currentCoordinate -= 10;
                         }
-                    }
-                    else if (direction == Direction.Down)
-                    {
-                        for (int i = 0; i < ship.size; i++)
+                        else if (direction == Direction.Down)
                         {
                             player1Radar[currentCoordinate] += ship.shipIdentifier;
                             currentCoordinate += 10;
                         }
-                    }
-                    else if (direction == Direction.Left)
-                    {
-                        for (int i = 0; i < ship.size; i++)
+                        else if (direction == Direction.Left)
                         {
                             player1Radar[currentCoordinate] += ship.shipIdentifier;
                             currentCoordinate -= 1;
                         }
-                    }
-                    else if (direction == Direction.Right)
-                    {
-                        for (int i = 0; i < ship.size; i++)
+                        else if (direction == Direction.Right)
                         {
                             player1Radar[currentCoordinate] += ship.shipIdentifier;
                             currentCoordinate += 1;
                         }
                     }
+
+                    return;
                 }
                 else
                 {
-                    Console.WriteLine("That placement isn't valid.");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nThat placement isn't valid.");
+                    Console.ResetColor();
                 }
 
             } while (true) ;
@@ -103,54 +99,58 @@ namespace Battleship.UI
         private bool ValidateShipPlacement(Ship ship, int coordinate, Direction direction)
         {
             int currentCoordinate = coordinate;
-            string[] shipPositions = new string[ship.size];
-            bool shipPositionValid = true;
+            bool IsValid = true;
+
+            if (currentCoordinate < 0 || currentCoordinate > 100)
+            {
+                return false;
+            }
 
             if (player1Radar[currentCoordinate] == null)
-            {           
-                if (direction == Direction.Up)
+            {
+                for (int i = 0; i < ship.size; i++)
                 {
-                    for (int i = 0; i < ship.size; i++)
+                    if (currentCoordinate < 0 || currentCoordinate > 100)
                     {
-                        shipPositions[i] += player1Radar[currentCoordinate];
-                        currentCoordinate -= 10;
+                        return false;
                     }
-                }
-                else if (direction == Direction.Down)
-                {
-                    for (int i = 0; i < ship.size; i++)
+                    if (direction == Direction.Up)
                     {
-                        shipPositions[i] += player1Radar[currentCoordinate];
+                        if(CheckGridSpaceEmpty(currentCoordinate))
+                        { IsValid = false; break; }
+                        currentCoordinate -= 10;
+
+                    }
+                    else if (direction == Direction.Down)
+                    {
+                        if (CheckGridSpaceEmpty(currentCoordinate))
+                        { IsValid = false; break; }
                         currentCoordinate += 10;
                     }
-                }
-                else if (direction == Direction.Left)
-                {
-                    for (int i = 0; i < ship.size; i++)
+                    else if (direction == Direction.Left)
                     {
-                        shipPositions[i] += player1Radar[currentCoordinate];
+                        if (CheckGridSpaceEmpty(currentCoordinate))
+                        { IsValid = false; break; }
                         currentCoordinate -= 1;
                     }
-                }
-                else if (direction == Direction.Right)
-                {
-                    for (int i = 0; i < ship.size; i++)
+                    else if (direction == Direction.Right)
                     {
-                        shipPositions[i] += player1Radar[currentCoordinate];
+                        if (CheckGridSpaceEmpty(currentCoordinate))
+                        { IsValid = false; break; }
                         currentCoordinate += 1;
                     }
                 }
             }
             else
             {
-                shipPositionValid = false;
+                return false;
             }
 
-            return shipPositionValid;
+            return IsValid;
         }
         public bool CheckGridSpaceEmpty(int position)
         {
-            if (player1Radar[position] == null)
+            if (player1Radar[position] != null)
             {
                 return true;
             }
