@@ -55,12 +55,13 @@ namespace Battleship.UI
             {
                 Coordinates firstPoint = ConsoleIO.GetCurrentShipFirstCoordinate();
 
-                if(ValidateGridPositoin(firstPoint.gridPosition))
+                int gridCurrentPoint = firstPoint.gridPosition;
+
+                if (ValidateGridPositoin(gridCurrentPoint))
                 {
+
                     Orientation orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
                     Direction direction = ConsoleIO.GetShipDirection(orientation);
-
-                    int gridCurrentPoint = firstPoint.gridPosition;
 
                     if (orientation == Orientation.Vertical)
                     {
@@ -68,8 +69,16 @@ namespace Battleship.UI
                         {
                             for (int i = 0; i < ship.size; i++)
                             {
-                                player1Radar[gridCurrentPoint] += ship.shipIdentifier;
-                                gridCurrentPoint -= 10;
+                                if (player1Radar[gridCurrentPoint] == null)
+                                {
+                                    player1Radar[gridCurrentPoint] += ship.shipIdentifier;
+                                    gridCurrentPoint -= 10;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("POSITION TAKEN");
+                                    return;
+                                }
                             }
 
                             return;
@@ -107,11 +116,11 @@ namespace Battleship.UI
                         }
                     }
                 }
-                else
+                    else
                 {
                     Console.WriteLine("POSITION TAKEN");
                 }
-            } while (true);
+        } while (true);
         }
 
         public IPlayer SwithPlayers(IPlayer player)
@@ -125,10 +134,9 @@ namespace Battleship.UI
                 return player1;
             }
         }
-
         public bool ValidateGridPositoin(int position)
         {
-            for (int i = 0; i < player1Radar.Length; i++)
+            for (int i = position; i < player1Radar.Length; i++)
             {
                 if (player1Radar[i] == null)
                 {
