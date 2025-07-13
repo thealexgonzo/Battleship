@@ -5,5 +5,6 @@ namespace Battleship.UI.Interfaces
     {
         bool IsHuman { get; }
         string playerName { get; }
+        public string[] playerRadar { get; set; }
     }
 }

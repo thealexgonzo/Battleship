@@ -13,7 +13,7 @@ namespace Battleship.UI.Implementations
     public class HumanPlayer : IPlayer
     {
         public bool IsHuman { get { return true; } }
-
         public string playerName { get; set; }
+        public string[] playerRadar { get; set; }
     }
 }

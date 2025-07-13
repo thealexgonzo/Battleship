@@ -13,9 +13,6 @@ namespace Battleship.UI
     public class GameManager
     {
         public Ship[] ship = new Ship[5];
-
-        public string[] player1Radar = new string[100];
-        public string[] player2Radar = new string[100];
         public IPlayer player1 { get; private set; }
         public IPlayer player2 { get; private set; }
 
@@ -33,58 +30,63 @@ namespace Battleship.UI
 
         public void SetUpCurrentPlayerFleet(IPlayer currentPlayer)
         {
-            GameGrid.DisplayBattleGrid(player1Radar);
-            ConsoleIO.InitialiseEmptyCombatRadar(player1);
-            PositionShips(ship[0]);
+            currentPlayer.playerRadar = new string[100];
+
+            GameGrid.DisplayBattleGrid(currentPlayer.playerRadar);
+            ConsoleIO.InitialiseEmptyCombatRadar(currentPlayer);
+            PositionShips(ship[0], currentPlayer);
             ConsoleIO.AnyKey();
 
             for (int i = 1; i < ship.Length; i++)
             {
                 Console.Clear();
-                GameGrid.DisplayBattleGrid(player1Radar);
-                PositionShips(ship[i]);
+                GameGrid.DisplayBattleGrid(currentPlayer.playerRadar);
+                PositionShips(ship[i], currentPlayer);
                 ConsoleIO.AnyKey();
             }
+
+            Console.WriteLine("Commander, your fleet is in position.");
+            ConsoleIO.AnyKey();
         }
 
-        private void PositionShips(Ship ship)
+        private void PositionShips(Ship ship, IPlayer currentPlayer)
         {
             Console.WriteLine($"\nShip to place: {ship.name} | Size: {ship.size}");
             Coordinates coordinate = ConsoleIO.GetCurrentShipFirstCoordinate();
             int currentCoordinate = coordinate.gridAcceptedCoordinate;
             Orientation orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
-            //Direction direction = ConsoleIO.GetShipDirection(orientation);
+
             do
             {
                 Direction direction = ConsoleIO.GetShipDirection(orientation);
-                //ValidateShipPlacement(ship, currentCoordinate, direction)
-                if (ValidateShipPlacement(ship, currentCoordinate, direction))
+
+                if (ValidateShipPlacement(ship, currentCoordinate, direction, currentPlayer))
                 {
                     for (int i = 0; i < ship.size; i++)
                     {
                         if (direction == Direction.Up)
                         {
-                            player1Radar[currentCoordinate] += ship.shipIdentifier;
+                            currentPlayer.playerRadar[currentCoordinate] += ship.shipIdentifier;
                             currentCoordinate -= 10;
                         }
                         else if (direction == Direction.Down)
                         {
-                            player1Radar[currentCoordinate] += ship.shipIdentifier;
+                            currentPlayer.playerRadar[currentCoordinate] += ship.shipIdentifier;
                             currentCoordinate += 10;
                         }
                         else if (direction == Direction.Left)
                         {
-                            player1Radar[currentCoordinate] += ship.shipIdentifier;
+                            currentPlayer.playerRadar[currentCoordinate] += ship.shipIdentifier;
                             currentCoordinate -= 1;
                         }
                         else if (direction == Direction.Right)
                         {
-                            player1Radar[currentCoordinate] += ship.shipIdentifier;
+                            currentPlayer.playerRadar[currentCoordinate] += ship.shipIdentifier;
                             currentCoordinate += 1;
                         }
                     }
 
-                    return;
+                    break;
                 }
                 else
                 {
@@ -96,7 +98,7 @@ namespace Battleship.UI
             } while (true) ;
         }
 
-        private bool ValidateShipPlacement(Ship ship, int coordinate, Direction direction)
+        private bool ValidateShipPlacement(Ship ship, int coordinate, Direction direction, IPlayer currentPlayer)
         {
             int currentCoordinate = coordinate;
             bool IsValid = true;
@@ -106,7 +108,7 @@ namespace Battleship.UI
                 return false;
             }
 
-            if (player1Radar[currentCoordinate] == null)
+            if (currentPlayer.playerRadar[currentCoordinate] == null)
             {
                 for (int i = 0; i < ship.size; i++)
                 {
@@ -116,26 +118,26 @@ namespace Battleship.UI
                     }
                     if (direction == Direction.Up)
                     {
-                        if(CheckGridSpaceEmpty(currentCoordinate))
+                        if(CheckGridSpaceEmpty(currentCoordinate, currentPlayer))
                         { IsValid = false; break; }
                         currentCoordinate -= 10;
 
                     }
                     else if (direction == Direction.Down)
                     {
-                        if (CheckGridSpaceEmpty(currentCoordinate))
+                        if (CheckGridSpaceEmpty(currentCoordinate, currentPlayer))
                         { IsValid = false; break; }
                         currentCoordinate += 10;
                     }
                     else if (direction == Direction.Left)
                     {
-                        if (CheckGridSpaceEmpty(currentCoordinate))
+                        if (CheckGridSpaceEmpty(currentCoordinate, currentPlayer))
                         { IsValid = false; break; }
                         currentCoordinate -= 1;
                     }
                     else if (direction == Direction.Right)
                     {
-                        if (CheckGridSpaceEmpty(currentCoordinate))
+                        if (CheckGridSpaceEmpty(currentCoordinate, currentPlayer))
                         { IsValid = false; break; }
                         currentCoordinate += 1;
                     }
@@ -148,9 +150,9 @@ namespace Battleship.UI
 
             return IsValid;
         }
-        public bool CheckGridSpaceEmpty(int position)
+        public bool CheckGridSpaceEmpty(int position, IPlayer currentPlayer)
         {
-            if (player1Radar[position] != null)
+            if (currentPlayer.playerRadar[position] != null)
             {
                 return true;
             }
