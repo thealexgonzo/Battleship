@@ -54,6 +54,12 @@ namespace Battleship.UI.IO
             Console.WriteLine("\nCoordinates should be from A-J (column) and 1-10 (row).");
             Console.WriteLine("You will be prompted for the starting coordinate and the direction of placement.");
         }
+        public static void InitiateCombatSystem(IPlayer player)
+        {
+            Console.WriteLine("Commander we're in positin and ready for the attack.");
+            Console.WriteLine("The enemy has 5 ships remaining, with 17 hits left.");
+            Console.WriteLine($"Commander {player.playerName}, it's our turn to attack.");
+        }
         public static void DisplayEmptyRadar()
         {
             Console.WriteLine("\n");

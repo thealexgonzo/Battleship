@@ -12,7 +12,6 @@ namespace Battleship.UI
 {
     public class GameManager
     {
-        public Ship[] ship = new Ship[5];
         public IPlayer player1 { get; private set; }
         public IPlayer player2 { get; private set; }
         public GameManager(IPlayer p1, IPlayer p2)
@@ -20,35 +19,53 @@ namespace Battleship.UI
             player1 = p1;
             player2 = p2;
 
-            ship[0] = new AircraftCarrier();
-            ship[1] = new Battleship.UI.Ships.Battleship();
-            ship[2] = new Cruiser();
-            ship[3] = new Submarine();
-            ship[4] = new Destroyer();
+            player1.fleet = new Ship[5];
+            player2.fleet = new Ship[5];
+
+            player1.fleet[0] = new AircraftCarrier();
+            player1.fleet[1] = new Battleship.UI.Ships.Battleship();
+            player1.fleet[2] = new Cruiser();
+            player1.fleet[3] = new Submarine();
+            player1.fleet[4] = new Destroyer();
+
+            player2.fleet[0] = new AircraftCarrier();
+            player2.fleet[1] = new Battleship.UI.Ships.Battleship();
+            player2.fleet[2] = new Cruiser();
+            player2.fleet[3] = new Submarine();
+            player2.fleet[4] = new Destroyer();
+
+            player1.playerCombatRadar = new string[100];
+            player2.playerCombatRadar = new string[100];
         }
         public void SetUpCurrentPlayerFleet(IPlayer currentPlayer)
         {
             currentPlayer.playerRadar = new string[100];
 
-            GameGrid.DisplayBattleGrid(currentPlayer.playerRadar);
+            GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
             ConsoleIO.InitialiseEmptyCombatRadar(currentPlayer);
-            PositionShips(ship[0], currentPlayer);
+            PositionShips(currentPlayer.fleet[0], currentPlayer);
             ConsoleIO.AnyKey();
 
-            for (int i = 1; i < ship.Length; i++)
+            for (int i = 1; i < currentPlayer.fleet.Length; i++)
             {
                 Console.Clear();
-                GameGrid.DisplayBattleGrid(currentPlayer.playerRadar);
-                PositionShips(ship[i], currentPlayer);
+                GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
+                PositionShips(currentPlayer.fleet[i], currentPlayer);
                 ConsoleIO.AnyKey();
             }
 
             Console.Clear();
-            GameGrid.DisplayBattleGrid(currentPlayer.playerRadar);
+            GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\nFleet positioned and ready for battle, Commander.");
+            Console.WriteLine($"\nFleet positioned and ready for battle, Commander {currentPlayer.playerName}.");
             Console.ResetColor();
             ConsoleIO.AnyKey();
+        }
+        public void PlayerAttacks(IPlayer currentPlayer)
+        {
+            Console.Clear();
+
+            GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
         }
         private void PositionShips(Ship ship, IPlayer currentPlayer)
         {

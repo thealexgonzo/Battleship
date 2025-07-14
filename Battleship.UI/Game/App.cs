@@ -30,8 +30,8 @@ namespace Battleship.UI.Game
             manager.SetUpCurrentPlayerFleet(player1);
             manager.SetUpCurrentPlayerFleet(player2);
 
-            //Switch Players
-            //currentPlayer = manager.SwithPlayers(currentPlayer);
+
+            manager.PlayerAttacks(currentPlayer);
 
         }
     }
