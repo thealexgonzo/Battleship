@@ -15,7 +15,6 @@ namespace Battleship.UI
         public Ship[] ship = new Ship[5];
         public IPlayer player1 { get; private set; }
         public IPlayer player2 { get; private set; }
-
         public GameManager(IPlayer p1, IPlayer p2)
         {
             player1 = p1;
@@ -27,7 +26,6 @@ namespace Battleship.UI
             ship[3] = new Submarine();
             ship[4] = new Destroyer();
         }
-
         public void SetUpCurrentPlayerFleet(IPlayer currentPlayer)
         {
             currentPlayer.playerRadar = new string[100];
@@ -45,19 +43,41 @@ namespace Battleship.UI
                 ConsoleIO.AnyKey();
             }
 
-            Console.WriteLine("Commander, your fleet is in position.");
+            Console.Clear();
+            GameGrid.DisplayBattleGrid(currentPlayer.playerRadar);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nFleet positioned and ready for battle, Commander.");
+            Console.ResetColor();
             ConsoleIO.AnyKey();
         }
-
         private void PositionShips(Ship ship, IPlayer currentPlayer)
         {
             Console.WriteLine($"\nShip to place: {ship.name} | Size: {ship.size}");
-            Coordinates coordinate = ConsoleIO.GetCurrentShipFirstCoordinate();
-            int currentCoordinate = coordinate.gridAcceptedCoordinate;
-            Orientation orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
+            Coordinates coordinate;
 
             do
             {
+                coordinate = ConsoleIO.GetCurrentShipFirstCoordinate();
+
+                if (!CheckGridSpaceEmpty(coordinate.gridAcceptedCoordinate, currentPlayer))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nInvalid coordinates, Commander. We can’t deploy outside the grid or on top of another vessel.");
+                    Console.ResetColor();
+                }
+
+            } while (true);
+
+            int currentCoordinate = coordinate.gridAcceptedCoordinate;
+
+            do
+            {
+                
+                Orientation orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
                 Direction direction = ConsoleIO.GetShipDirection(orientation);
 
                 if (ValidateShipPlacement(ship, currentCoordinate, direction, currentPlayer))
@@ -86,18 +106,21 @@ namespace Battleship.UI
                         }
                     }
 
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"\nDeployment confirmed: {ship.name} has been positioned.");
+                    Console.ResetColor();
+
                     break;
                 }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\nThat placement isn't valid.");
+                    Console.WriteLine("\nInvalid coordinates, Commander. We can’t deploy outside the grid or on top of another vessel.");
                     Console.ResetColor();
                 }
 
             } while (true) ;
         }
-
         private bool ValidateShipPlacement(Ship ship, int coordinate, Direction direction, IPlayer currentPlayer)
         {
             int currentCoordinate = coordinate;

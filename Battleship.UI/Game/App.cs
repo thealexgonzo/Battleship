@@ -28,11 +28,11 @@ namespace Battleship.UI.Game
             IPlayer currentPlayer = player1;
 
             manager.SetUpCurrentPlayerFleet(player1);
+            manager.SetUpCurrentPlayerFleet(player2);
 
             //Switch Players
             //currentPlayer = manager.SwithPlayers(currentPlayer);
 
-            manager.SetUpCurrentPlayerFleet(player2);
         }
     }
 }
