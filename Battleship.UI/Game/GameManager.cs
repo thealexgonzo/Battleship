@@ -80,7 +80,7 @@ namespace Battleship.UI
                 Orientation orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
                 Direction direction = ConsoleIO.GetShipDirection(orientation);
 
-                if (ValidateShipPlacement(ship, currentCoordinate, direction, currentPlayer))
+                if (ValidateShipPlacement(ship, currentCoordinate, direction, currentPlayer, coordinate))
                 {
                     for (int i = 0; i < ship.size; i++)
                     {
@@ -121,7 +121,7 @@ namespace Battleship.UI
 
             } while (true) ;
         }
-        private bool ValidateShipPlacement(Ship ship, int coordinate, Direction direction, IPlayer currentPlayer)
+        private bool ValidateShipPlacement(Ship ship, int coordinate, Direction direction, IPlayer currentPlayer, Coordinates coords)
         {
             int currentCoordinate = coordinate;
             bool IsValid = true;
@@ -154,13 +154,13 @@ namespace Battleship.UI
                     }
                     else if (direction == Direction.Left)
                     {
-                        if (CheckGridSpaceEmpty(currentCoordinate, currentPlayer))
+                        if (CheckGridSpaceEmpty(currentCoordinate, currentPlayer) || currentCoordinate > coords.rowRangeMax || currentCoordinate < coords.rowRangeMin)
                         { IsValid = false; break; }
                         currentCoordinate -= 1;
                     }
                     else if (direction == Direction.Right)
                     {
-                        if (CheckGridSpaceEmpty(currentCoordinate, currentPlayer))
+                        if (CheckGridSpaceEmpty(currentCoordinate, currentPlayer) || currentCoordinate > coords.rowRangeMax || currentCoordinate < coords.rowRangeMin)
                         { IsValid = false; break; }
                         currentCoordinate += 1;
                     }
