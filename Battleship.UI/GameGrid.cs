@@ -59,7 +59,13 @@ namespace Battleship.UI
                     }
                     else
                     {
+                        if(attackCoordiantes[j] == "H")
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                        }
+
                         Console.Write($" {attackCoordiantes[j]}");
+                        Console.ResetColor();
                     }
                 }
                 Console.WriteLine();

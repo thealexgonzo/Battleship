@@ -54,11 +54,11 @@ namespace Battleship.UI.IO
             Console.WriteLine("\nCoordinates should be from A-J (column) and 1-10 (row).");
             Console.WriteLine("You will be prompted for the starting coordinate and the direction of placement.");
         }
-        public static void InitiateCombatSystem(IPlayer player)
+        public static void InitiateCombatSystem(IPlayer currentPlayer, IPlayer enemyPlayer)
         {
-            Console.WriteLine("Commander we're in positin and ready for the attack.");
-            Console.WriteLine("The enemy has 5 ships remaining, with 17 hits left.");
-            Console.WriteLine($"Commander {player.playerName}, it's our turn to attack.");
+            Console.WriteLine("All systems online. Weapons standing by.");
+            Console.WriteLine($"Enemy fleet still has {enemyPlayer.fleet.Length} ships afloat");
+            Console.WriteLine($"Your move, Commander {currentPlayer.playerName}. Select your target.");
         }
         public static void DisplayEmptyRadar()
         {
@@ -97,6 +97,27 @@ namespace Battleship.UI.IO
 
                 if ((coordinate.Length > 1 && coordinate.Length <= 3) && 
                     (int.TryParse(coordinate.Substring(1), out int row)) && 
+                    ((columns.Contains(coordinate[0])) && (row >= 1 && row <= 10)))
+                {
+                    return new Coordinates(coordinate);
+                }
+                else
+                {
+                    DisplayInvalidCoordinateErrorMessage();
+                }
+            } while (true);
+        }
+        public static Coordinates GetCoordinate()
+        {
+            do
+            {
+                string columns = "ABCDEFGHIJ";
+
+                Console.Write("\nLocked and loaded. Designate target coordinate (example: C5): ");
+                string coordinate = Console.ReadLine().ToUpper();
+
+                if ((coordinate.Length > 1 && coordinate.Length <= 3) &&
+                    (int.TryParse(coordinate.Substring(1), out int row)) &&
                     ((columns.Contains(coordinate[0])) && (row >= 1 && row <= 10)))
                 {
                     return new Coordinates(coordinate);
@@ -186,7 +207,7 @@ namespace Battleship.UI.IO
         }
         public static void AnyKey()
         {
-            Console.WriteLine("\nPress any key to continue...");
+            Console.Write("\nPress any key to continue...");
             Console.ReadKey();
         }
         public static void TypeOut(string message, int delay = 60)

@@ -61,12 +61,51 @@ namespace Battleship.UI
             Console.ResetColor();
             ConsoleIO.AnyKey();
         }
-        public void PlayerAttacks(IPlayer currentPlayer)
+        public void PlayerAttacks(IPlayer currentPlayer, IPlayer oponent)
         {
             Console.Clear();
-
+            ConsoleIO.InitiateCombatSystem(currentPlayer, oponent);
             GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
+            Coordinates attackCoord;
+
+            do
+            {
+                attackCoord = ConsoleIO.GetCoordinate();
+
+                if (currentPlayer.playerCombatRadar[attackCoord.gridAcceptedCoordinate] == null)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("\nWe've already fired at those coordinates, Commander. Choose a new target.");
+                }
+            } while (true);
+
+            ShotResult shotResult = CheckShotResult(attackCoord.gridAcceptedCoordinate, oponent);
+
+            if(shotResult == ShotResult.Hit)
+            {
+                currentPlayer.playerCombatRadar[attackCoord.gridAcceptedCoordinate] = "H";
+                Console.Clear();
+                GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
+                Console.WriteLine("\nBoom! That shot landed — target has been hit!");
+            }
+            else
+            {
+                currentPlayer.playerCombatRadar[attackCoord.gridAcceptedCoordinate] = "M";
+                Console.Clear();
+                GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
+                Console.WriteLine("\nNegative impact — shot hit open water.");
+            }
+
+            Ship ship = oponent.fleet.ElementAt(attackCoord.gridAcceptedCoordinate);
+
+            CheckSunkShip(oponent.fleet);
+
+            ConsoleIO.AnyKey();
         }
+        
         private void PositionShips(Ship ship, IPlayer currentPlayer)
         {
             Console.WriteLine($"\nShip to place: {ship.name} | Size: {ship.size}");
@@ -211,6 +250,37 @@ namespace Battleship.UI
             {
                 return player1;
             }
+        }
+        public ShotResult CheckShotResult(int shot, IPlayer oponent)
+        {
+            if (oponent.playerRadar[shot] != null)
+            {
+                oponent.playerRadar[shot] = "X";
+                return ShotResult.Hit;
+            }
+            else
+            {
+                return ShotResult.Miss;
+            }
+        }
+        public static bool CheckSunkShip(Ship ship)
+        {
+            int shotCount = 0;
+
+            for (int i = 0; i < ship.size; i++)
+            {
+                if (ship.shipCoordinates[i] == "X")
+                {
+                    shotCount++;
+                }
+            }
+          
+            if(shotCount == ship.size)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

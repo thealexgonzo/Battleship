@@ -26,13 +26,18 @@ namespace Battleship.UI.Game
             GameManager manager = new GameManager(player1, player2);
 
             IPlayer currentPlayer = player1;
+            IPlayer enemyPlayer = player2;
 
             manager.SetUpCurrentPlayerFleet(player1);
             manager.SetUpCurrentPlayerFleet(player2);
 
+            int player1FleetCount = player1.fleet.Length;
+            int player2FleetCount = player2.fleet.Length;
 
-            manager.PlayerAttacks(currentPlayer);
-
+            for(int i = 0; i < 6; i++)
+            {
+                manager.PlayerAttacks(currentPlayer, enemyPlayer);
+            }
         }
     }
 }
