@@ -135,7 +135,7 @@ namespace Battleship.UI
             {
                 for (int i = 0; i < ship.size; i++)
                 {
-                    if (currentCoordinate < 0 || currentCoordinate > 100)
+                    if (currentCoordinate < 0 || currentCoordinate >= currentPlayer.playerRadar.Length)
                     {
                         return false;
                     }

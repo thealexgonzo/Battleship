@@ -18,6 +18,7 @@ namespace Battleship.UI
             int column = gridColumns.IndexOf(coordinate[0]);
             int row = int.Parse(coordinate.Substring(1)) - 1;
 
+            //I'm quite proud of this implementation - rowRangeMax and rowRangeMin
             rowRangeMax = ((row + 1) * 10) - 1;
             rowRangeMin = row == 0 ? 0 : ((row + 1) * 10) - 10;
 
