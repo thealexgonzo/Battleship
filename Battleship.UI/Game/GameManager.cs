@@ -99,10 +99,6 @@ namespace Battleship.UI
                 Console.WriteLine("\nNegative impact — shot hit open water.");
             }
 
-            Ship ship = oponent.fleet.ElementAt(attackCoord.gridAcceptedCoordinate);
-
-            CheckSunkShip(oponent.fleet);
-
             ConsoleIO.AnyKey();
         }
         
@@ -255,7 +251,6 @@ namespace Battleship.UI
         {
             if (oponent.playerRadar[shot] != null)
             {
-                oponent.playerRadar[shot] = "X";
                 return ShotResult.Hit;
             }
             else
