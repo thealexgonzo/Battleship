@@ -61,10 +61,10 @@ namespace Battleship.UI
             Console.ResetColor();
             ConsoleIO.AnyKey();
         }
-        public void PlayerAttacks(IPlayer currentPlayer, IPlayer oponent)
+        public void PlayerAttacks(IPlayer currentPlayer, IPlayer opponent)
         {
             Console.Clear();
-            ConsoleIO.InitiateCombatSystem(currentPlayer, oponent);
+            ConsoleIO.InitiateCombatSystem(currentPlayer, opponent);
             GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
             Coordinates attackCoord;
 
@@ -82,7 +82,7 @@ namespace Battleship.UI
                 }
             } while (true);
 
-            ShotResult shotResult = CheckShotResult(attackCoord.gridAcceptedCoordinate, oponent);
+            ShotResult shotResult = CheckShotResult(attackCoord.gridAcceptedCoordinate, opponent);
 
             if(shotResult == ShotResult.Hit)
             {
@@ -91,14 +91,14 @@ namespace Battleship.UI
                 GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
                 Console.WriteLine("\nBoom! That shot landed — target has been hit!");
 
-                int shipHit = CheckShipHit(oponent.playerRadar[attackCoord.gridAcceptedCoordinate]);
-                oponent.fleet[shipHit].hitCoutner++;
+                int shipHit = CheckShipHit(opponent.playerRadar[attackCoord.gridAcceptedCoordinate]);
+                opponent.fleet[shipHit].hitCounter++;
 
-                if (oponent.fleet[shipHit].size == oponent.fleet[shipHit].hitCoutner)
+                if (opponent.fleet[shipHit].size == opponent.fleet[shipHit].hitCounter)
                 {
                     Console.OutputEncoding = System.Text.Encoding.UTF8;
                     Console.WriteLine("💥 Boom! 💦 Gurgle... The ship is sunk! 🚢💀");
-                    oponent.fleet[shipHit] = null;
+                    opponent.fleet[shipHit] = null;
                 }
             }
             else
@@ -257,9 +257,9 @@ namespace Battleship.UI
                 return player1;
             }
         }
-        private ShotResult CheckShotResult(int shot, IPlayer oponent)
+        private ShotResult CheckShotResult(int shot, IPlayer opponent)
         {
-            if (oponent.playerRadar[shot] != null)
+            if (opponent.playerRadar[shot] != null)
             {
                 return ShotResult.Hit;
             }
