@@ -94,15 +94,12 @@ namespace Battleship.UI
                 int shipHit = CheckShipHit(oponent.playerRadar[attackCoord.gridAcceptedCoordinate]);
                 oponent.fleet[shipHit].hitCoutner++;
 
-                //for (int i = 0; i < oponent.fleet.size; i++)
-                //{
-                    if (oponent.fleet[shipHit].size == oponent.fleet[shipHit].hitCoutner)
-                    {
-                        Console.OutputEncoding = System.Text.Encoding.UTF8;
-                        Console.WriteLine("💥 Boom! 💦 Gurgle... The ship is sunk! 🚢💀");
-                        oponent.fleet[shipHit] = null;
-                    }
-                //}
+                if (oponent.fleet[shipHit].size == oponent.fleet[shipHit].hitCoutner)
+                {
+                    Console.OutputEncoding = System.Text.Encoding.UTF8;
+                    Console.WriteLine("💥 Boom! 💦 Gurgle... The ship is sunk! 🚢💀");
+                    oponent.fleet[shipHit] = null;
+                }
             }
             else
             {
