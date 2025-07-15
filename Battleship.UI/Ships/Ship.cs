@@ -14,5 +14,6 @@ namespace Battleship.UI.Ships
         public ShipType type { get; set; }
         public string shipIdentifier { get; set; }
         public string[] shipCoordinates { get; set; }
+        public int hitCoutner { get; set; }
     }
 }

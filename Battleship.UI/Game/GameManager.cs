@@ -90,6 +90,19 @@ namespace Battleship.UI
                 Console.Clear();
                 GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
                 Console.WriteLine("\nBoom! That shot landed — target has been hit!");
+
+                int shipHit = CheckShipHit(oponent.playerRadar[attackCoord.gridAcceptedCoordinate]);
+                oponent.fleet[shipHit].hitCoutner++;
+
+                //for (int i = 0; i < oponent.fleet.size; i++)
+                //{
+                    if (oponent.fleet[shipHit].size == oponent.fleet[shipHit].hitCoutner)
+                    {
+                        Console.OutputEncoding = System.Text.Encoding.UTF8;
+                        Console.WriteLine("💥 Boom! 💦 Gurgle... The ship is sunk! 🚢💀");
+                        oponent.fleet[shipHit] = null;
+                    }
+                //}
             }
             else
             {
@@ -247,7 +260,7 @@ namespace Battleship.UI
                 return player1;
             }
         }
-        public ShotResult CheckShotResult(int shot, IPlayer oponent)
+        private ShotResult CheckShotResult(int shot, IPlayer oponent)
         {
             if (oponent.playerRadar[shot] != null)
             {
@@ -258,24 +271,28 @@ namespace Battleship.UI
                 return ShotResult.Miss;
             }
         }
-        public static bool CheckSunkShip(Ship ship)
+        private static int CheckShipHit(string shipIdentifier)
         {
-            int shotCount = 0;
-
-            for (int i = 0; i < ship.size; i++)
+            if(shipIdentifier == "A")
             {
-                if (ship.shipCoordinates[i] == "X")
-                {
-                    shotCount++;
-                }
+                return 0;
             }
-          
-            if(shotCount == ship.size)
+            else if(shipIdentifier == "B")
             {
-                return true;
+                return 1;
             }
-
-            return false;
+            else if(shipIdentifier == "C")
+            {
+                return 2;
+            }
+            else if(shipIdentifier == "S")
+            {
+                return 3;
+            }
+            else
+            {
+                return 4;
+            }
         }
     }
 }

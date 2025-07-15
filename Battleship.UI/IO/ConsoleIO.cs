@@ -56,8 +56,18 @@ namespace Battleship.UI.IO
         }
         public static void InitiateCombatSystem(IPlayer currentPlayer, IPlayer enemyPlayer)
         {
+            int enemyFleetCount = 0;
+
+            for(int i = 0; i < enemyPlayer.fleet.Length; i++)
+            {
+                if (enemyPlayer.fleet[i] != null)
+                {
+                    enemyFleetCount++;
+                }
+            }
+
             Console.WriteLine("All systems online. Weapons standing by.");
-            Console.WriteLine($"Enemy fleet still has {enemyPlayer.fleet.Length} ships afloat");
+            Console.WriteLine($"Enemy fleet still has {enemyFleetCount} ships afloat");
             Console.WriteLine($"Your move, Commander {currentPlayer.playerName}. Select your target.");
         }
         public static void DisplayEmptyRadar()
