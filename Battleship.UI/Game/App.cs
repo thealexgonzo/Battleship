@@ -47,7 +47,7 @@ namespace Battleship.UI.Game
 
                 if (sunkShipCounter == enemyPlayer.fleet.Length)
                 {
-                    Console.WriteLine($"ENEMY FLEET DESTROYED! {currentPlayer.playerName} WINS!");
+                    Console.WriteLine($"FLEET DESTROYED! {currentPlayer.playerName} WINS!");
                     break;
                 }
 
