@@ -30,22 +30,22 @@ namespace Battleship.UI.Game
             
             IPlayer currentPlayer = player1;
             IPlayer enemyPlayer = player2;
-            
-            int playerFleetCount = currentPlayer.fleet.Length;
-
+ 
             do
             {
+                int sunkShipCounter = 0;
+
                 ShotResult shotResult = manager.PlayerAttacks(currentPlayer, enemyPlayer);
 
                 for (int i = 0; i < currentPlayer.fleet.Length; i++)
                 {
-                    if (currentPlayer.fleet[i] == null)
+                    if (enemyPlayer.fleet[i] == null)
                     {
-                        playerFleetCount--;
+                        sunkShipCounter++;
                     }
                 }
 
-                if (playerFleetCount == 0)
+                if (sunkShipCounter == enemyPlayer.fleet.Length)
                 {
                     Console.WriteLine($"ENEMY FLEET DESTROYED! {currentPlayer.playerName} WINS!");
                     break;
