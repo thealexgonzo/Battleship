@@ -61,7 +61,7 @@ namespace Battleship.UI
             Console.ResetColor();
             ConsoleIO.AnyKey();
         }
-        public void PlayerAttacks(IPlayer currentPlayer, IPlayer opponent)
+        public ShotResult PlayerAttacks(IPlayer currentPlayer, IPlayer opponent)
         {
             Console.Clear();
             ConsoleIO.InitiateCombatSystem(currentPlayer, opponent);
@@ -99,6 +99,7 @@ namespace Battleship.UI
                     Console.OutputEncoding = System.Text.Encoding.UTF8;
                     Console.WriteLine("💥 Boom! 💦 Gurgle... The ship is sunk! 🚢💀");
                     opponent.fleet[shipHit] = null;
+                    shotResult = ShotResult.HitAndSunk;
                 }
             }
             else
@@ -110,6 +111,7 @@ namespace Battleship.UI
             }
 
             ConsoleIO.AnyKey();
+            return shotResult;
         }
         
         private void PositionShips(Ship ship, IPlayer currentPlayer)
