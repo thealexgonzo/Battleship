@@ -26,37 +26,37 @@ namespace Battleship.UI.Game
             GameManager manager = new GameManager(player1, player2);
 
             manager.SetUpCurrentPlayerFleet(player1);
-            //manager.SetUpCurrentPlayerFleet(player2);
+            manager.SetUpCurrentPlayerFleet(player2);
             
             IPlayer currentPlayer = player1;
             IPlayer enemyPlayer = player2;
- 
-            //do
-            //{
-            //    int sunkShipCounter = 0;
 
-            //    ShotResult shotResult = manager.PlayerAttacks(currentPlayer, enemyPlayer);
+            do
+            {
+                int sunkShipCounter = 0;
 
-            //    for (int i = 0; i < currentPlayer.fleet.Length; i++)
-            //    {
-            //        if (enemyPlayer.fleet[i] == null)
-            //        {
-            //            sunkShipCounter++;
-            //        }
-            //    }
+                ShotResult shotResult = manager.PlayerAttacks(currentPlayer, enemyPlayer);
 
-            //    if (sunkShipCounter == enemyPlayer.fleet.Length)
-            //    {
-            //        Console.ForegroundColor = ConsoleColor.Green;
-            //        Console.WriteLine($"MISSION COMPLETE: Target Neutralized. {currentPlayer.playerName} dominates the ocean!");
-            //        Console.ResetColor();
-            //        break;
-            //    }
+                for (int i = 0; i < currentPlayer.fleet.Length; i++)
+                {
+                    if (enemyPlayer.fleet[i] == null)
+                    {
+                        sunkShipCounter++;
+                    }
+                }
 
-            //    currentPlayer = manager.SwithPlayers(currentPlayer);
-            //    enemyPlayer = manager.SwithPlayers(enemyPlayer);
+                if (sunkShipCounter == enemyPlayer.fleet.Length)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"MISSION COMPLETE: Target Neutralized. {currentPlayer.playerName} dominates the ocean!");
+                    Console.ResetColor();
+                    break;
+                }
 
-            //} while (true);  
+                currentPlayer = manager.SwithPlayers(currentPlayer);
+                enemyPlayer = manager.SwithPlayers(enemyPlayer);
+
+            } while (true);
         }
     }
 }

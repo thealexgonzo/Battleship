@@ -70,61 +70,114 @@ namespace Battleship.UI
                 {
                     PositionShips(currentPlayer.fleet[i], currentPlayer);
                 }
-                GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
+
+                //GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
             }
             
         }
         public ShotResult PlayerAttacks(IPlayer currentPlayer, IPlayer opponent)
         {
-            Console.Clear();
-            ConsoleIO.InitiateCombatSystem(currentPlayer, opponent);
-            GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
-            Coordinates attackCoord;
-
-            do
+            if (currentPlayer.IsHuman)
             {
-                attackCoord = ConsoleIO.GetCoordinate();
+                Console.Clear();
+                ConsoleIO.InitiateCombatSystem(currentPlayer, opponent);
+                GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
+                Coordinates attackCoord;
 
-                if (currentPlayer.playerCombatRadar[attackCoord.gridAcceptedCoordinate] == null)
+                do
                 {
-                    break;
+                    attackCoord = ConsoleIO.GetCoordinate();
+
+                    if (currentPlayer.playerCombatRadar[attackCoord.gridAcceptedCoordinate] == null)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nWe've already fired at those coordinates, Commander. Choose a new target.");
+                    }
+                } while (true);
+
+                ShotResult shotResult = CheckShotResult(attackCoord.gridAcceptedCoordinate, opponent);
+
+                if (shotResult == ShotResult.Hit)
+                {
+                    currentPlayer.playerCombatRadar[attackCoord.gridAcceptedCoordinate] = "H";
+                    Console.Clear();
+                    GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
+
+                    int shipHit = CheckShipHit(opponent.playerRadar[attackCoord.gridAcceptedCoordinate]);
+                    opponent.fleet[shipHit].hitCounter++;
+
+                    if (opponent.fleet[shipHit].size == opponent.fleet[shipHit].hitCounter)
+                    {
+                        opponent.fleet[shipHit] = null;
+                        shotResult = ShotResult.HitAndSunk;
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("\nWe've already fired at those coordinates, Commander. Choose a new target.");
+                    currentPlayer.playerCombatRadar[attackCoord.gridAcceptedCoordinate] = "M";
+                    Console.Clear();
+                    GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
                 }
-            } while (true);
 
-            ShotResult shotResult = CheckShotResult(attackCoord.gridAcceptedCoordinate, opponent);
-
-            if(shotResult == ShotResult.Hit)
-            {
-                currentPlayer.playerCombatRadar[attackCoord.gridAcceptedCoordinate] = "H";
-                Console.Clear();
-                GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
-                Console.WriteLine("\nBoom! That shot landed — target has been hit!");
-
-                int shipHit = CheckShipHit(opponent.playerRadar[attackCoord.gridAcceptedCoordinate]);
-                opponent.fleet[shipHit].hitCounter++;
-
-                if (opponent.fleet[shipHit].size == opponent.fleet[shipHit].hitCounter)
-                {
-                    Console.OutputEncoding = System.Text.Encoding.UTF8;
-                    Console.WriteLine("💥 Boom! 💦 Gurgle... The ship is sunk! 🚢💀");
-                    opponent.fleet[shipHit] = null;
-                    shotResult = ShotResult.HitAndSunk;
-                }
+                ConsoleIO.DisplayShotResult(shotResult, currentPlayer);
+                ConsoleIO.AnyKey();
+                return shotResult;
             }
             else
             {
-                currentPlayer.playerCombatRadar[attackCoord.gridAcceptedCoordinate] = "M";
                 Console.Clear();
-                GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
-                Console.WriteLine("\nNegative impact — shot hit open water.");
-            }
+                
+                int humanfleet = 0;
 
-            ConsoleIO.AnyKey();
-            return shotResult;
+                for(int i = 0; i < opponent.fleet.Length; i++)
+                {
+                    if (opponent.fleet[i] != null)
+                    {
+                        humanfleet++;
+                    }
+                }
+
+                Console.WriteLine($"Commander we have {humanfleet} ship's still operational.");
+                Console.WriteLine($"Brace yourself - {currentPlayer.playerName} is preparing to strike...");
+
+                Random SelectingShot = new Random();
+                int shot;
+
+                do
+                {
+                    shot = SelectingShot.Next(0, 100);
+
+                } while (currentPlayer.playerCombatRadar[shot] != null);
+
+
+                ShotResult computerShot = CheckShotResult(shot, opponent);
+
+                if(computerShot == ShotResult.Hit)
+                {
+                    int shipHit = CheckShipHit(opponent.playerRadar[shot]);
+                    opponent.fleet[shipHit].hitCounter++;
+                    currentPlayer.playerCombatRadar[shot] = "H";
+
+                    if (opponent.fleet[shipHit].size == opponent.fleet[shipHit].hitCounter)
+                    {
+                        opponent.fleet[shipHit] = null;
+                        computerShot = ShotResult.HitAndSunk;
+                    }
+                }
+                else
+                {
+                    currentPlayer.playerCombatRadar[shot] = "X";
+                }
+
+                Console.WriteLine($"{currentPlayer.playerName} fires a shot at {ConsoleIO.ShotConverter(shot)}");
+                ConsoleIO.DisplayShotResult(computerShot, currentPlayer);
+                ConsoleIO.AnyKey();
+
+                return computerShot;
+            }
         }
         private void PositionShips(Ship ship, IPlayer currentPlayer)
         {
@@ -159,7 +212,6 @@ namespace Battleship.UI
 
                 } while (!CheckGridSpaceEmpty(currentCoordinate, currentPlayer));
             }
-
 
             Orientation orientation;
             Direction direction;

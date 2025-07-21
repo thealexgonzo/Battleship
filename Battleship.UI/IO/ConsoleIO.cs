@@ -230,6 +230,50 @@ namespace Battleship.UI.IO
             }
 
             Console.WriteLine();
-        } 
+        }
+        public static void DisplayShotResult(ShotResult result, IPlayer currentPlayer)
+        {
+            if (currentPlayer.IsHuman)
+            {
+                switch (result)
+                {
+                    case ShotResult.Miss:
+                        Console.WriteLine("\nNegative impact — shot hit open water.");
+                        break;
+                    case ShotResult.Hit:
+                        Console.WriteLine("\nBoom! That shot landed — target has been hit!");
+                        break;
+                    case ShotResult.HitAndSunk:
+                        Console.OutputEncoding = System.Text.Encoding.UTF8;
+                        Console.WriteLine("💥 Boom! 💦 Gurgle... The ship is sunk! 🚢💀");
+                        break;
+                }
+            }
+            else
+            {
+                switch (result)
+                {
+                    case ShotResult.Miss:
+                        Console.WriteLine("\nNo impact. Iron Depth fired and missed.");
+                        break;
+                    case ShotResult.Hit:
+                        Console.OutputEncoding = System.Text.Encoding.UTF8;
+                        Console.WriteLine("\n💥 Impact detected! A ship has been damaged by Iron Depth.");
+                        break;
+                    case ShotResult.HitAndSunk:
+                        Console.OutputEncoding = System.Text.Encoding.UTF8;
+                        Console.WriteLine("💀 Critical damage! Iron Depth has sunk one of your ships.");
+                        break;
+                }
+            }             
+        }
+        public static string ShotConverter(int shot)
+        {
+            string columns = "ABCDEFGHIJ";
+
+            string coordinate = columns.ElementAt(shot % 10).ToString() + (int)((shot / 10) + 1);
+
+            return coordinate;
+        }
     }
 }
