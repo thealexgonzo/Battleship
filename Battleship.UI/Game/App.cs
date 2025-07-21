@@ -26,7 +26,7 @@ namespace Battleship.UI.Game
             GameManager manager = new GameManager(player1, player2);
 
             manager.SetUpCurrentPlayerFleet(player1);
-            manager.SetUpCurrentPlayerFleet(player2);
+            //manager.SetUpCurrentPlayerFleet(player2);
             
             IPlayer currentPlayer = player1;
             IPlayer enemyPlayer = player2;

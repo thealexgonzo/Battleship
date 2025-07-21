@@ -65,32 +65,9 @@ namespace Battleship.UI
             }
             else
             {
-                Random coordiante = new Random();
-
-                int firstCoordinate = 0;
-
-                do
+                for (int i = 0; i < currentPlayer.fleet.Length; i++)
                 {
-                    firstCoordinate = coordiante.Next(0, 100);
-
-                } while (CheckGridSpaceEmpty(firstCoordinate, currentPlayer));
-
-                Console.WriteLine(firstCoordinate);
-
-                Random HorizontalOrVertical = new Random();
-                Random LeftOrRight = new Random();
-                Random UpOrDown = new Random();
-
-                Orientation orientation = (Orientation)HorizontalOrVertical.Next(0, 2);
-                Direction direction;
-
-                if (orientation == Orientation.Horizontal)
-                {
-                    direction = (Direction)LeftOrRight.Next(0, 2);
-                }
-                else
-                {
-                    direction = (Direction)UpOrDown.Next(2, 4);
+                    SetUpComputerPlayer(currentPlayer, currentPlayer.fleet[i]);
                 }
             }
             
@@ -158,22 +135,17 @@ namespace Battleship.UI
 
                 if (!CheckGridSpaceEmpty(coordinate.gridAcceptedCoordinate, currentPlayer))
                 {
-                    break;
-                }
-                else
-                {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\nInvalid coordinates, Commander. We can’t deploy outside the grid or on top of another vessel.");
                     Console.ResetColor();
                 }
 
-            } while (true);
+            } while (!CheckGridSpaceEmpty(coordinate.gridAcceptedCoordinate, currentPlayer));
 
             int currentCoordinate = coordinate.gridAcceptedCoordinate;
 
             do
             {
-                
                 Orientation orientation = ConsoleIO.GetShipOrientation("Enter ship orientation: 'H' for horizontal or 'V' for vertical: ");
                 Direction direction = ConsoleIO.GetShipDirection(orientation);
 
@@ -215,7 +187,6 @@ namespace Battleship.UI
                     Console.WriteLine("\nInvalid coordinates, Commander. We can’t deploy outside the grid or on top of another vessel.");
                     Console.ResetColor();
                 }
-
             } while (true) ;
         }
         private bool ValidateShipPlacement(Ship ship, int coordinate, Direction direction, IPlayer currentPlayer, Coordinates coords)
@@ -238,26 +209,26 @@ namespace Battleship.UI
                     }
                     if (direction == Direction.Up)
                     {
-                        if(CheckGridSpaceEmpty(currentCoordinate, currentPlayer))
+                        if(!CheckGridSpaceEmpty(currentCoordinate, currentPlayer))
                         { IsValid = false; break; }
                         currentCoordinate -= 10;
 
                     }
                     else if (direction == Direction.Down)
                     {
-                        if (CheckGridSpaceEmpty(currentCoordinate, currentPlayer))
+                        if (!CheckGridSpaceEmpty(currentCoordinate, currentPlayer))
                         { IsValid = false; break; }
                         currentCoordinate += 10;
                     }
                     else if (direction == Direction.Left)
                     {
-                        if (CheckGridSpaceEmpty(currentCoordinate, currentPlayer) || currentCoordinate > coords.rowRangeMax || currentCoordinate < coords.rowRangeMin)
+                        if (!CheckGridSpaceEmpty(currentCoordinate, currentPlayer) || currentCoordinate > coords.rowRangeMax || currentCoordinate < coords.rowRangeMin)
                         { IsValid = false; break; }
                         currentCoordinate -= 1;
                     }
                     else if (direction == Direction.Right)
                     {
-                        if (CheckGridSpaceEmpty(currentCoordinate, currentPlayer) || currentCoordinate > coords.rowRangeMax || currentCoordinate < coords.rowRangeMin)
+                        if (!CheckGridSpaceEmpty(currentCoordinate, currentPlayer) || currentCoordinate > coords.rowRangeMax || currentCoordinate < coords.rowRangeMin)
                         { IsValid = false; break; }
                         currentCoordinate += 1;
                     }
@@ -272,7 +243,7 @@ namespace Battleship.UI
         }
         public bool CheckGridSpaceEmpty(int position, IPlayer currentPlayer)
         {
-            if (currentPlayer.playerRadar[position] != null)
+            if (currentPlayer.playerRadar[position] == null)
             {
                 return true;
             }
@@ -325,6 +296,47 @@ namespace Battleship.UI
             {
                 return 4;
             }
+        }
+        
+        private void SetUpComputerPlayer(IPlayer computerPlayer, Ship currentShip)
+        {
+            Random coordiante = new Random();
+
+            int firstCoordinate = 0;
+            int currentCoordinate = firstCoordinate;
+
+            do
+            {
+                firstCoordinate = coordiante.Next(0, 100);
+
+            } while (!CheckGridSpaceEmpty(firstCoordinate, computerPlayer));
+
+            Console.WriteLine($"First coord: {firstCoordinate}");
+
+            Random HorizontalOrVertical = new Random();
+            Random LeftOrRight = new Random();
+            Random UpOrDown = new Random();
+            Orientation orientation;
+            Direction direction;
+
+            do
+            {
+                orientation = (Orientation)HorizontalOrVertical.Next(0, 2);
+                Console.WriteLine($"Orientation: {orientation}");
+
+                if (orientation == Orientation.Horizontal)
+                {
+                    direction = (Direction)LeftOrRight.Next(0, 2);
+                }
+                else
+                {
+                    direction = (Direction)UpOrDown.Next(2, 4);
+                }
+
+                Console.WriteLine($"Direction: {direction}");
+
+            } while (!ValidateShipPlacement(currentShip, currentCoordinate, direction, computerPlayer, firstCoordinate));
+
         }
     }
 }
