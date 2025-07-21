@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Battleship.UI.IO
@@ -19,24 +20,24 @@ namespace Battleship.UI.IO
             Console.WriteLine("=========================================");
             Console.ResetColor();
         }
-        public static string GetPlayerName(string prompt, bool isHumanPlayer)
+        public static string GetPlayerName(string prompt)
         {
-            string humanPlayerName;
-
-            if (isHumanPlayer)
+            do
             {
                 Console.Write(prompt);
-                humanPlayerName = Console.ReadLine();
 
-                return humanPlayerName;
-            }
-            else
-            {
-                Console.WriteLine("\n>>> Opponent selected: Iron Depth [AUTONOMOUS COMBAT SYSTEM v3.4]" +
-                "\n>>> Initializing strategic modules... Ready for engagement.");
-            }
+                string humanPlayerName = Console.ReadLine();
 
-            return null;
+                if(!string.IsNullOrEmpty(humanPlayerName) && Regex.IsMatch(humanPlayerName, "[a-zA-z]"))
+                {
+                    return humanPlayerName;
+                }
+                else
+                {
+                    Console.WriteLine("Commander ID must be a valid name — letters only. No digits or special characters.");
+                }
+
+            } while (true);
         }
         public static void InitialiseEmptyCombatRadar(IPlayer player)
         {

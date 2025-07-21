@@ -25,14 +25,16 @@ namespace Battleship.UI.Factories
                 {
                     HumanPlayer player = new HumanPlayer();
 
-                    player.playerName = ConsoleIO.GetPlayerName("\n>> Authorization required. Enter Commander name: ", player.IsHuman);
+                    player.playerName = ConsoleIO.GetPlayerName("\n>> Authorization required. Enter Commander name: ");
 
                     return player;
                 }
                 else if (userChoice == "C")
                 {
-                    ConsoleIO.TypeOut("\n>>> Opponent selected: Iron Depth [AUTONOMOUS COMBAT SYSTEM v3.4] " +
-                        "\n>>> Initializing strategic modules... Ready for engagement.");
+                    //ConsoleIO.TypeOut("\n>>> Opponent selected: Iron Depth [AUTONOMOUS COMBAT SYSTEM v3.4] " +
+                    //    "\n>>> Initializing strategic modules... Ready for engagement.");
+                    //Temporary:
+                    Console.WriteLine("\nIron Depth");
 
                     return new ComputerPlayer();
                 }

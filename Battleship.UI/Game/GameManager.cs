@@ -39,10 +39,10 @@ namespace Battleship.UI
         }
         public void SetUpCurrentPlayerFleet(IPlayer currentPlayer)
         {
+            currentPlayer.playerRadar = new string[100];
+
             if (currentPlayer.IsHuman)
             {
-                currentPlayer.playerRadar = new string[100];
-
                 GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
                 ConsoleIO.InitialiseEmptyCombatRadar(currentPlayer);
                 PositionShips(currentPlayer.fleet[0], currentPlayer);
@@ -67,21 +67,30 @@ namespace Battleship.UI
             {
                 Random coordiante = new Random();
 
-                int firstCoordiante = coordiante.Next(0, 100);
+                int firstCoordinate = 0;
+
+                do
+                {
+                    firstCoordinate = coordiante.Next(0, 100);
+
+                } while (CheckGridSpaceEmpty(firstCoordinate, currentPlayer));
+
+                Console.WriteLine(firstCoordinate);
 
                 Random HorizontalOrVertical = new Random();
                 Random LeftOrRight = new Random();
                 Random UpOrDown = new Random();
 
                 Orientation orientation = (Orientation)HorizontalOrVertical.Next(0, 2);
+                Direction direction;
 
                 if (orientation == Orientation.Horizontal)
                 {
-                    Direction LeftOrRighDirection = (Direction)LeftOrRight.Next(0, 2);
+                    direction = (Direction)LeftOrRight.Next(0, 2);
                 }
                 else
                 {
-                    Direction UpOrDownDirection = (Direction)UpOrDown.Next(2, 4);
+                    direction = (Direction)UpOrDown.Next(2, 4);
                 }
             }
             

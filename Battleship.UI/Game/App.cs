@@ -31,32 +31,32 @@ namespace Battleship.UI.Game
             IPlayer currentPlayer = player1;
             IPlayer enemyPlayer = player2;
  
-            do
-            {
-                int sunkShipCounter = 0;
+            //do
+            //{
+            //    int sunkShipCounter = 0;
 
-                ShotResult shotResult = manager.PlayerAttacks(currentPlayer, enemyPlayer);
+            //    ShotResult shotResult = manager.PlayerAttacks(currentPlayer, enemyPlayer);
 
-                for (int i = 0; i < currentPlayer.fleet.Length; i++)
-                {
-                    if (enemyPlayer.fleet[i] == null)
-                    {
-                        sunkShipCounter++;
-                    }
-                }
+            //    for (int i = 0; i < currentPlayer.fleet.Length; i++)
+            //    {
+            //        if (enemyPlayer.fleet[i] == null)
+            //        {
+            //            sunkShipCounter++;
+            //        }
+            //    }
 
-                if (sunkShipCounter == enemyPlayer.fleet.Length)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"MISSION COMPLETE: Target Neutralized. {currentPlayer.playerName} dominates the ocean!");
-                    Console.ResetColor();
-                    break;
-                }
+            //    if (sunkShipCounter == enemyPlayer.fleet.Length)
+            //    {
+            //        Console.ForegroundColor = ConsoleColor.Green;
+            //        Console.WriteLine($"MISSION COMPLETE: Target Neutralized. {currentPlayer.playerName} dominates the ocean!");
+            //        Console.ResetColor();
+            //        break;
+            //    }
 
-                currentPlayer = manager.SwithPlayers(currentPlayer);
-                enemyPlayer = manager.SwithPlayers(enemyPlayer);
+            //    currentPlayer = manager.SwithPlayers(currentPlayer);
+            //    enemyPlayer = manager.SwithPlayers(enemyPlayer);
 
-            } while (true);  
+            //} while (true);  
         }
     }
 }
