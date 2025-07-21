@@ -13,7 +13,6 @@ namespace Battleship.UI.Ships
             name = "Aircraft Carrier";
             size = 5;
             type = Enums.ShipType.AircraftCarrier;
-            shipCoordinates = new string[size];
             shipIdentifier = "A";
             hitCounter = 0;
         }

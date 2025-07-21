@@ -47,7 +47,9 @@ namespace Battleship.UI.Game
 
                 if (sunkShipCounter == enemyPlayer.fleet.Length)
                 {
-                    Console.WriteLine($"FLEET DESTROYED! {currentPlayer.playerName} WINS!");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"MISSION COMPLETE: Target Neutralized. {currentPlayer.playerName} dominates the ocean!");
+                    Console.ResetColor();
                     break;
                 }
 

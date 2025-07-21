@@ -39,27 +39,52 @@ namespace Battleship.UI
         }
         public void SetUpCurrentPlayerFleet(IPlayer currentPlayer)
         {
-            currentPlayer.playerRadar = new string[100];
-
-            GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
-            ConsoleIO.InitialiseEmptyCombatRadar(currentPlayer);
-            PositionShips(currentPlayer.fleet[0], currentPlayer);
-            ConsoleIO.AnyKey();
-
-            for (int i = 1; i < currentPlayer.fleet.Length; i++)
+            if (currentPlayer.IsHuman)
             {
+                currentPlayer.playerRadar = new string[100];
+
+                GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
+                ConsoleIO.InitialiseEmptyCombatRadar(currentPlayer);
+                PositionShips(currentPlayer.fleet[0], currentPlayer);
+                ConsoleIO.AnyKey();
+
+                for (int i = 1; i < currentPlayer.fleet.Length; i++)
+                {
+                    Console.Clear();
+                    GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
+                    PositionShips(currentPlayer.fleet[i], currentPlayer);
+                    ConsoleIO.AnyKey();
+                }
+
                 Console.Clear();
                 GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
-                PositionShips(currentPlayer.fleet[i], currentPlayer);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\nFleet positioned and ready for battle, Commander {currentPlayer.playerName}.");
+                Console.ResetColor();
                 ConsoleIO.AnyKey();
             }
+            else
+            {
+                Random coordiante = new Random();
 
-            Console.Clear();
-            GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\nFleet positioned and ready for battle, Commander {currentPlayer.playerName}.");
-            Console.ResetColor();
-            ConsoleIO.AnyKey();
+                int firstCoordiante = coordiante.Next(0, 100);
+
+                Random HorizontalOrVertical = new Random();
+                Random LeftOrRight = new Random();
+                Random UpOrDown = new Random();
+
+                Orientation orientation = (Orientation)HorizontalOrVertical.Next(0, 2);
+
+                if (orientation == Orientation.Horizontal)
+                {
+                    Direction LeftOrRighDirection = (Direction)LeftOrRight.Next(0, 2);
+                }
+                else
+                {
+                    Direction UpOrDownDirection = (Direction)UpOrDown.Next(2, 4);
+                }
+            }
+            
         }
         public ShotResult PlayerAttacks(IPlayer currentPlayer, IPlayer opponent)
         {
@@ -113,7 +138,6 @@ namespace Battleship.UI
             ConsoleIO.AnyKey();
             return shotResult;
         }
-        
         private void PositionShips(Ship ship, IPlayer currentPlayer)
         {
             Console.WriteLine($"\nShip to place: {ship.name} | Size: {ship.size}");
