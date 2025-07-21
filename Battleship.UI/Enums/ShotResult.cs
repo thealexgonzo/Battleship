@@ -10,6 +10,7 @@ namespace Battleship.UI.Enums
     {
         Miss,
         Hit,
-        HitAndSunk
+        HitAndSunk,
+        NoShot
     }
 }

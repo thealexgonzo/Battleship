@@ -13,6 +13,8 @@ namespace Battleship.UI
 {
     public class GameManager
     {
+        private ShotResult previousComputerShot = ShotResult.NoShot;
+        private int previousComputerAttackPoint = 0;
         public IPlayer player1 { get; private set; }
         public IPlayer player2 { get; private set; }
         public GameManager(IPlayer p1, IPlayer p2)
@@ -70,10 +72,7 @@ namespace Battleship.UI
                 {
                     PositionShips(currentPlayer.fleet[i], currentPlayer);
                 }
-
-                //GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
-            }
-            
+            }      
         }
         public ShotResult PlayerAttacks(IPlayer currentPlayer, IPlayer opponent)
         {
@@ -144,18 +143,27 @@ namespace Battleship.UI
                 Console.WriteLine($"Brace yourself - {currentPlayer.playerName} is preparing to strike...");
 
                 Random SelectingShot = new Random();
-                int shot;
+                ShotResult computerShot = ShotResult.NoShot;
+                int shot = 0;
 
-                do
+                if(previousComputerShot == ShotResult.Hit)
                 {
-                    shot = SelectingShot.Next(0, 100);
+                    shot += previousComputerAttackPoint + 1;
+                }
+                else
+                {
+                    do
+                    {
+                        shot = SelectingShot.Next(0, 100);
 
-                } while (currentPlayer.playerCombatRadar[shot] != null);
+                    } while (currentPlayer.playerCombatRadar[shot] != null);
+                }
 
+                computerShot = CheckShotResult(shot, opponent);
+                previousComputerShot = computerShot;
+                previousComputerAttackPoint = shot;
 
-                ShotResult computerShot = CheckShotResult(shot, opponent);
-
-                if(computerShot == ShotResult.Hit)
+                if (computerShot == ShotResult.Hit)
                 {
                     int shipHit = CheckShipHit(opponent.playerRadar[shot]);
                     opponent.fleet[shipHit].hitCounter++;
@@ -169,7 +177,7 @@ namespace Battleship.UI
                 }
                 else
                 {
-                    currentPlayer.playerCombatRadar[shot] = "X";
+                    currentPlayer.playerCombatRadar[shot] = "M";
                 }
 
                 Console.WriteLine($"{currentPlayer.playerName} fires a shot at {ConsoleIO.ShotConverter(shot)}");

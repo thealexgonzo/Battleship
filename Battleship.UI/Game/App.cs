@@ -47,12 +47,22 @@ namespace Battleship.UI.Game
 
                 if (sunkShipCounter == enemyPlayer.fleet.Length)
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"MISSION COMPLETE: Target Neutralized. {currentPlayer.playerName} dominates the ocean!");
-                    Console.ResetColor();
+                    if (currentPlayer.IsHuman)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"MISSION COMPLETE: Target Neutralized. {currentPlayer.playerName} dominates the ocean!");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"MISSION FAILED: All ships lost. {currentPlayer.playerName} has seized control of the ocean.");
+                        Console.ResetColor();
+                    }
+
                     break;
                 }
-
+                
                 currentPlayer = manager.SwithPlayers(currentPlayer);
                 enemyPlayer = manager.SwithPlayers(enemyPlayer);
 
