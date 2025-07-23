@@ -144,12 +144,23 @@ namespace Battleship.UI
 
                 Random SelectingShot = new Random();
                 ShotResult computerShot = ShotResult.NoShot;
+                int[] attackCalculations = [1, -10, -1, 10];
+                bool Target = false;
+
                 int shot = 0;
 
                 if (previousComputerShot == ShotResult.Hit)
                 {
-                    if (CheckValidAttackCoordiante(previousComputerAttackPoint + 1, currentPlayer))
-                        shot = previousComputerAttackPoint + 1;
+                    Target = true;
+                }
+
+                if (Target)
+                {
+                    for(int i = 0; i < attackCalculations.Length; i++)
+                    {
+                        if (CheckValidAttackCoordiante(previousComputerAttackPoint + i, currentPlayer))
+                            shot = previousComputerAttackPoint + i;
+                    }
                 }
                 else
                 {
@@ -174,6 +185,7 @@ namespace Battleship.UI
                     int shipHit = CheckShipHit(opponent.playerRadar[shot]);
                     opponent.fleet[shipHit].hitCounter += 1;
                     currentPlayer.playerCombatRadar[shot] = "H";
+                    shotHistory[shot] = "H";
 
                     if (opponent.fleet[shipHit].size == opponent.fleet[shipHit].hitCounter)
                     {
@@ -184,6 +196,7 @@ namespace Battleship.UI
                 else
                 {
                     currentPlayer.playerCombatRadar[shot] = "M";
+                    shotHistory[shot] = "M";
                 }
 
                 ConsoleIO.DisplayShotResult(computerShot, currentPlayer);
