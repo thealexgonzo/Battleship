@@ -146,9 +146,10 @@ namespace Battleship.UI
                 ShotResult computerShot = ShotResult.NoShot;
                 int shot = 0;
 
-                if(previousComputerShot == ShotResult.Hit)
+                if (previousComputerShot == ShotResult.Hit)
                 {
-                    shot += previousComputerAttackPoint + 1;
+                    if (CheckValidAttackCoordiante(previousComputerAttackPoint + 1, currentPlayer))
+                        shot = previousComputerAttackPoint + 1;
                 }
                 else
                 {
@@ -156,8 +157,13 @@ namespace Battleship.UI
                     {
                         shot = SelectingShot.Next(0, 100);
 
-                    } while (currentPlayer.playerCombatRadar[shot] != null);
+                        if (CheckValidAttackCoordiante(shot, currentPlayer))
+                            break;
+
+                    } while (true);
                 }
+                
+                Console.WriteLine($"{currentPlayer.playerName} fires a shot at {ConsoleIO.ShotConverter(shot)}");
 
                 computerShot = CheckShotResult(shot, opponent);
                 previousComputerShot = computerShot;
@@ -166,7 +172,7 @@ namespace Battleship.UI
                 if (computerShot == ShotResult.Hit)
                 {
                     int shipHit = CheckShipHit(opponent.playerRadar[shot]);
-                    opponent.fleet[shipHit].hitCounter++;
+                    opponent.fleet[shipHit].hitCounter += 1;
                     currentPlayer.playerCombatRadar[shot] = "H";
 
                     if (opponent.fleet[shipHit].size == opponent.fleet[shipHit].hitCounter)
@@ -180,7 +186,6 @@ namespace Battleship.UI
                     currentPlayer.playerCombatRadar[shot] = "M";
                 }
 
-                Console.WriteLine($"{currentPlayer.playerName} fires a shot at {ConsoleIO.ShotConverter(shot)}");
                 ConsoleIO.DisplayShotResult(computerShot, currentPlayer);
                 ConsoleIO.AnyKey();
 
@@ -406,6 +411,13 @@ namespace Battleship.UI
                 return 4;
             }
         } 
+        private bool CheckValidAttackCoordiante(int coordinate, IPlayer currentPlayer)
+        {
+            if (currentPlayer.playerCombatRadar[coordinate] == null)
+                return true;
+            else
+                return false;
+        }
     }
 }
 
