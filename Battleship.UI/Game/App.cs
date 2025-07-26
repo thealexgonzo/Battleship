@@ -33,17 +33,9 @@ namespace Battleship.UI.Game
 
             do
             {
-                int sunkShipCounter = 0;
+                int sunkShipCounter = enemyPlayer.fleet.Count(f => f == null);
 
                 ShotResult shotResult = manager.PlayerAttacks(currentPlayer, enemyPlayer);
-
-                for (int i = 0; i < currentPlayer.fleet.Length; i++)
-                {
-                    if (enemyPlayer.fleet[i] == null)
-                    {
-                        sunkShipCounter++;
-                    }
-                }
 
                 if (sunkShipCounter == enemyPlayer.fleet.Length)
                 {

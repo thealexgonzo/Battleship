@@ -72,6 +72,9 @@ namespace Battleship.UI
                 {
                     PositionShips(currentPlayer.fleet[i], currentPlayer);
                 }
+
+                GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
+                ConsoleIO.AnyKey();
             }      
         }
         public ShotResult PlayerAttacks(IPlayer currentPlayer, IPlayer opponent)
@@ -128,18 +131,8 @@ namespace Battleship.UI
             else
             {
                 Console.Clear();
-                
-                int humanfleet = 0;
 
-                for(int i = 0; i < opponent.fleet.Length; i++)
-                {
-                    if (opponent.fleet[i] != null)
-                    {
-                        humanfleet++;
-                    }
-                }
-
-                Console.WriteLine($"Commander we have {humanfleet} ship's still operational.");
+                Console.WriteLine($"Commander we have {opponent.fleet.Count(f => f != null)} ship's still operational.");
                 Console.WriteLine($"Brace yourself - {currentPlayer.playerName} is preparing to strike...");
 
                 Random SelectingShot = new Random();
