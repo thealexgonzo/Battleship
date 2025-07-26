@@ -28,7 +28,6 @@ namespace Battleship.UI.IO
 
                 string humanPlayerName = Console.ReadLine();
 
-
                 if(!string.IsNullOrEmpty(humanPlayerName) && Regex.IsMatch(humanPlayerName, "[a-zA-z]"))
                 {
                     return humanPlayerName;
