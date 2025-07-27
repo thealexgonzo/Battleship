@@ -6,6 +6,7 @@ using Battleship.UI.IO;
 using Battleship.UI.Ships;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.Design;
+using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
@@ -440,7 +441,7 @@ namespace Battleship.UI
                 do
                 {
                     shotOptionsCurrentIndex++;
-
+                    // Need to fix validation in order for the computer to make choices in the correct ranges
                     if (CheckValidAttackCoordiante(NextAttackCoordiante
                             + shotOptionsCurrentIndex, computerPlayer))
                             //&& NextAttackCoordiante + shotOptionsCurrentIndex < 100 &&
@@ -449,7 +450,7 @@ namespace Battleship.UI
 
                 } while (true);
             }
-
+            
             Console.WriteLine($"Using shot option: {shotOptions[shotOptionsCurrentIndex]}");
 
             do
