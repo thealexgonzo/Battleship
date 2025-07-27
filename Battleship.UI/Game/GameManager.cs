@@ -426,7 +426,7 @@ namespace Battleship.UI
         } 
         private bool CheckValidAttackCoordiante(int coordinate, IPlayer currentPlayer)
         {
-            if (currentPlayer.playerCombatRadar[coordinate] == null)
+            if (coordinate > 0 && coordinate < 100 && currentPlayer.playerCombatRadar[coordinate] == null)
                 return true;
             else
                 return false;
@@ -437,7 +437,17 @@ namespace Battleship.UI
 
             if (ComputerTargetMode && previousShotResult == ShotResult.Miss)
             {
-                shotOptionsCurrentIndex++;
+                do
+                {
+                    shotOptionsCurrentIndex++;
+
+                    if (CheckValidAttackCoordiante(NextAttackCoordiante
+                            + shotOptionsCurrentIndex, computerPlayer))
+                            //&& NextAttackCoordiante + shotOptionsCurrentIndex < 100 &&
+                            //shotOptionsCurrentIndex + NextAttackCoordiante > 0)
+                        break;
+
+                } while (true);
             }
 
             Console.WriteLine($"Using shot option: {shotOptions[shotOptionsCurrentIndex]}");
