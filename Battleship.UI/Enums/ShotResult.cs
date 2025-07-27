@@ -11,6 +11,6 @@ namespace Battleship.UI.Enums
         Miss,
         Hit,
         HitAndSunk,
-        NoShot
+        Empty
     }
 }
