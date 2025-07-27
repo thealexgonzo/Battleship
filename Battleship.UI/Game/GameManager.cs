@@ -19,6 +19,7 @@ namespace Battleship.UI
         private bool ComputerTargetMode = false;
         private Orientation AttackPlane = Orientation.Horizontal;
         private int FirstHitCoordinate = 0;
+        private string[] shotHistory = new string[3];
         // Game setup
         public IPlayer player1 { get; private set; }
         public IPlayer player2 { get; private set; }
@@ -143,18 +144,27 @@ namespace Battleship.UI
                 Random GenerateRandomShot = new Random();
 
                 int attackCoordinate = 0;
+                
 
                 //Debugging printing
                 Console.WriteLine("=====");
-                Console.WriteLine($"Previous Attack Coodinte: {PreviousComputerAttackCoordiante}");
                 Console.WriteLine($"Target mode: {ComputerTargetMode}");
                 Console.WriteLine($"First Hit Coord: {FirstHitCoordinate}");
+                Console.WriteLine($"Shot History: {shotHistory[0]}, {shotHistory[1]}, {shotHistory[2]}");
                 Console.WriteLine($"Attack Plane: {AttackPlane}");
                 Console.WriteLine("=====");
 
                 if (ComputerTargetMode && FirstHitCoordinate != 0)
                 {
-                    attackCoordinate = ComputerAttackSystem(PreviousComputerAttackResult, PreviousComputerAttackCoordiante, currentPlayer);
+                    attackCoordinate = ComputerAttackSystem(PreviousComputerAttackResult, currentPlayer);
+
+                    if (PreviousComputerAttackResult == ShotResult.Hit)
+                        shotHistory.Append("H");
+                    else
+                        shotHistory.Append("M");
+
+                    if (shotHistory[1] == "M" && shotHistory[2] == "M")
+                        AttackPlane = Orientation.Vertical;
                 }
                 else
                 {
@@ -172,7 +182,6 @@ namespace Battleship.UI
 
                 ShotResult attackResult = CheckShotResult(attackCoordinate, opponent);
                 PreviousComputerAttackResult = attackResult;
-                PreviousComputerAttackCoordiante = attackCoordinate;
 
                 if (attackResult == ShotResult.Hit)
                 {
@@ -186,6 +195,8 @@ namespace Battleship.UI
                         attackResult = ShotResult.HitAndSunk;
                         ComputerTargetMode = false;
                         FirstHitCoordinate = 0;
+                        AttackPlane = Orientation.Horizontal;
+                        Array.Clear(shotHistory);
                     }
                     else
                     {
@@ -433,7 +444,7 @@ namespace Battleship.UI
             else
                 return false;
         }
-        private int ComputerAttackSystem(ShotResult previousShotResult, int previousAttackCoordinate, IPlayer computerPlayer)
+        private int ComputerAttackSystem(ShotResult previousShotResult, IPlayer computerPlayer)
         {
             int NextAttackCoordiante = 0;
             
