@@ -42,15 +42,15 @@ namespace Battleship.UI.Game
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine($"MISSION COMPLETE: Target Neutralized. {currentPlayer.playerName} dominates the ocean!");
                         Console.ResetColor();
+                        break;
                     }
                     else
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine($"MISSION FAILED: All ships lost. {currentPlayer.playerName} has seized control of the ocean.");
                         Console.ResetColor();
+                        break;
                     }
-
-                    break;
                 }
                 else
                 {
