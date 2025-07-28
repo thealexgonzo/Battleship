@@ -15,13 +15,12 @@ namespace Battleship.UI
     public class GameManager
     {
         // Computer attack system variables
-        private int PreviousComputerAttackCoordiante = 0;
         private ShotResult PreviousComputerAttackResult = ShotResult.Empty;
         private bool ComputerTargetMode = false;
         private int FirstHitCoordinate = 0;
-        private string[] shotHistory = new string[3];
         private int[] shotOptions = [1, -1, 10, -10];
         private int shotOptionsCurrentIndex = 0;
+        private int CurrentTargetCoordinate;
 
         // Game setup
         public IPlayer player1 { get; private set; }
@@ -148,14 +147,6 @@ namespace Battleship.UI
 
                 int attackCoordinate = 0;
 
-                //Debugging printing
-                //Console.WriteLine("=====");
-                //Console.WriteLine($"Target mode: {ComputerTargetMode}");
-                //Console.WriteLine($"First Hit Coord: {FirstHitCoordinate}");
-                //Console.WriteLine($"Shot options current index: {shotOptionsCurrentIndex}");
-                //Console.WriteLine($"Using shot option: {shotOptions[shotOptionsCurrentIndex]}");
-                //Console.WriteLine("=====");
-
                 if (ComputerTargetMode && FirstHitCoordinate != 0)
                 {
                     attackCoordinate = ComputerAttackSystem(PreviousComputerAttackResult, currentPlayer);
@@ -186,6 +177,7 @@ namespace Battleship.UI
                     opponent.fleet[shipHit].hitCounter += 1;
                     currentPlayer.playerCombatRadar[attackCoordinate] = "H";
                     ComputerTargetMode = true;
+                    CurrentTargetCoordinate = attackCoordinate;
 
                     if (opponent.fleet[shipHit].size == opponent.fleet[shipHit].hitCounter)
                     {
@@ -194,6 +186,7 @@ namespace Battleship.UI
                         ComputerTargetMode = false;
                         FirstHitCoordinate = 0;
                         shotOptionsCurrentIndex = 0;
+                        CurrentTargetCoordinate = 0;
                     }
                 }
                 else
@@ -437,49 +430,87 @@ namespace Battleship.UI
         }
         private int ComputerAttackSystem(ShotResult previousShotResult, IPlayer computerPlayer)
         {
-            int NextAttackCoordiante = FirstHitCoordinate;
+            //int NextAttackCoordinate = FirstHitCoordinate;
+            int NextAttackCoordinate = (previousShotResult == ShotResult.Miss) ? FirstHitCoordinate : CurrentTargetCoordinate;
             int rowMaxRange = (FirstHitCoordinate - (FirstHitCoordinate % 10)) + 9;
             int rowMinRange = FirstHitCoordinate - (FirstHitCoordinate % 10);
             int colMinRange = FirstHitCoordinate % 10;
             int colMaxRange = FirstHitCoordinate % 10 + 90;
 
+            //int target = NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex];
+            
             if (ComputerTargetMode && previousShotResult == ShotResult.Miss)
+            {
                 shotOptionsCurrentIndex++;
 
-            if (shotOptionsCurrentIndex == 0 && (NextAttackCoordiante + shotOptions[shotOptionsCurrentIndex] > rowMaxRange
-                    || computerPlayer.playerCombatRadar[NextAttackCoordiante + shotOptions[shotOptionsCurrentIndex]] != null))
-                shotOptionsCurrentIndex++;
+                if (shotOptionsCurrentIndex >= shotOptions.Length)
+                    shotOptionsCurrentIndex = 0;
 
-            if (shotOptionsCurrentIndex == 1 && (NextAttackCoordiante + shotOptions[shotOptionsCurrentIndex] < rowMinRange
-                || computerPlayer.playerCombatRadar[NextAttackCoordiante + shotOptions[shotOptionsCurrentIndex]] != null))
-                shotOptionsCurrentIndex++;
+                CurrentTargetCoordinate = FirstHitCoordinate;
+            }
+            else
+            {
+                switch (shotOptionsCurrentIndex)
+                {
+                    case 0:
+                        if (shotOptionsCurrentIndex == 0 && (NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex] > rowMaxRange
+                            || computerPlayer.playerCombatRadar[NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex]] != null))
+                            shotOptionsCurrentIndex++;
+                        break;
+                    case 1:
+                        if (shotOptionsCurrentIndex == 1 && (NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex] < rowMinRange
+                            || computerPlayer.playerCombatRadar[NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex]] != null))
+                            shotOptionsCurrentIndex++;
+                        break;
+                    case 2:
+                        if (shotOptionsCurrentIndex == 2 && (NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex] > colMaxRange
+                            || computerPlayer.playerCombatRadar[NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex]] != null))
+                            shotOptionsCurrentIndex++;
+                        break;
+                    case 3:
+                        if (shotOptionsCurrentIndex == 3 && (NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex] < colMinRange
+                            || computerPlayer.playerCombatRadar[NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex]] != null))
+                            shotOptionsCurrentIndex--;
+                        break;
+                }
+            }
 
-            if (shotOptionsCurrentIndex == 2 && (NextAttackCoordiante + shotOptions[shotOptionsCurrentIndex] > 99
-                || computerPlayer.playerCombatRadar[NextAttackCoordiante + shotOptions[shotOptionsCurrentIndex]] != null))
-                shotOptionsCurrentIndex++;
+            //if (shotOptionsCurrentIndex == 0 && (NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex] > rowMaxRange
+            //        || computerPlayer.playerCombatRadar[NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex]] != null))
+            //    shotOptionsCurrentIndex++;
 
-            if (shotOptionsCurrentIndex == 3 && (NextAttackCoordiante + shotOptions[shotOptionsCurrentIndex] < 0
-                || computerPlayer.playerCombatRadar[NextAttackCoordiante + shotOptions[shotOptionsCurrentIndex]] != null))
-                shotOptionsCurrentIndex--;
+            //if (shotOptionsCurrentIndex == 1 && (NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex] < rowMinRange
+            //    || computerPlayer.playerCombatRadar[NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex]] != null))
+            //    shotOptionsCurrentIndex++;
+
+            //if (shotOptionsCurrentIndex == 2 && (NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex] > colMaxRange
+            //    || computerPlayer.playerCombatRadar[NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex]] != null))
+            //    shotOptionsCurrentIndex++;
+
+            //if (shotOptionsCurrentIndex == 3 && (NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex] < colMinRange
+            //    || computerPlayer.playerCombatRadar[NextAttackCoordinate + shotOptions[shotOptionsCurrentIndex]] != null))
+            //    shotOptionsCurrentIndex--;
+
+            //if (shotOptionsCurrentIndex == 2 && (target >= 100
+            //    || target % 10 != FirstHitCoordinate % 10
+            //    || computerPlayer.playerCombatRadar[target] != null))
+            //    shotOptionsCurrentIndex++;
+
+            //if (shotOptionsCurrentIndex == 3 && (target < 0
+            //    || target % 10 != FirstHitCoordinate % 10
+            //    || computerPlayer.playerCombatRadar[target] != null))
+            //    shotOptionsCurrentIndex--;
 
             do
             {
-                NextAttackCoordiante += shotOptions[shotOptionsCurrentIndex];
-
-                Console.WriteLine("=====");
-                Console.WriteLine($"Target mode: {ComputerTargetMode}");
-                Console.WriteLine($"First Hit Coord: {FirstHitCoordinate}");
-                Console.WriteLine($"Next Attack Coord: {NextAttackCoordiante}");
-                Console.WriteLine($"Shot options current index: {shotOptionsCurrentIndex}");
-                Console.WriteLine($"Using shot option: {shotOptions[shotOptionsCurrentIndex]}");
-                Console.WriteLine("=====");
-
-                if (CheckValidAttackCoordiante(NextAttackCoordiante, computerPlayer))
+                NextAttackCoordinate += shotOptions[shotOptionsCurrentIndex];
+                if (CheckValidAttackCoordiante(NextAttackCoordinate, computerPlayer))
                     break;
 
             } while (true);
+            
 
-            return NextAttackCoordiante;
+            return NextAttackCoordinate;
         }
     }
 }
