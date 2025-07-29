@@ -33,6 +33,11 @@ namespace Battleship.UI.Game
 
             do
             {
+                ShotResult shotResult = manager.PlayerAttacks(currentPlayer, enemyPlayer);
+
+                currentPlayer = manager.SwithPlayers(currentPlayer);
+                enemyPlayer = manager.SwithPlayers(enemyPlayer);
+
                 int sunkShipCounter = enemyPlayer.fleet.Count(f => f == null);
 
                 if (sunkShipCounter == enemyPlayer.fleet.Length)
@@ -52,13 +57,7 @@ namespace Battleship.UI.Game
                         break;
                     }
                 }
-                else
-                {
-                    ShotResult shotResult = manager.PlayerAttacks(currentPlayer, enemyPlayer);
 
-                    currentPlayer = manager.SwithPlayers(currentPlayer);
-                    enemyPlayer = manager.SwithPlayers(enemyPlayer);
-                }
             } while (true);
         }
     }

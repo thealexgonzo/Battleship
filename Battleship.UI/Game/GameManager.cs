@@ -80,9 +80,6 @@ namespace Battleship.UI
                 {
                     PositionShips(currentPlayer.fleet[i], currentPlayer);
                 }
-
-                GameGrid.DisplayPositioningGrid(currentPlayer.playerRadar);
-                ConsoleIO.AnyKey();
             }      
         }
         public ShotResult PlayerAttacks(IPlayer currentPlayer, IPlayer opponent)
@@ -194,8 +191,6 @@ namespace Battleship.UI
                     currentPlayer.playerCombatRadar[attackCoordinate] = "M";
                 }
 
-                Console.WriteLine("====== COMPUTER RADAR =====");
-                GameGrid.DisplayCombatGrid(currentPlayer.playerCombatRadar);
                 ConsoleIO.DisplayShotResult(attackResult, currentPlayer);
                 ConsoleIO.AnyKey();
 

@@ -31,10 +31,8 @@ namespace Battleship.UI.Factories
                 }
                 else if (userChoice == "C")
                 {
-                    //ConsoleIO.TypeOut("\n>>> Opponent selected: Iron Depth [AUTONOMOUS COMBAT SYSTEM v3.4] " +
-                    //    "\n>>> Initializing strategic modules... Ready for engagement.");
-                    //Temporary:
-                    Console.WriteLine("\nIron Depth");
+                    ConsoleIO.TypeOut("\n>>> Opponent selected: Iron Depth [AUTONOMOUS COMBAT SYSTEM v3.4] " +
+                        "\n>>> Initializing strategic modules... Ready for engagement.");
 
                     return new ComputerPlayer();
                 }
